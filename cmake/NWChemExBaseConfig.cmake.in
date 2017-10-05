@@ -27,5 +27,8 @@ foreach(__module_i ${__modules})
    assert_strings_are_equal(${__file_name}_MODULE ${__name}_MODULE_PATH)
 endforeach()
 
+#Find the testing infrastructure
+find_package(CatchEx REQUIRED)
+
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(${__name} DEFAULT_MSG ${${__name}_MODULES})
 list(APPEND CMAKE_MODULE_PATH ${${__name}_MODULES})

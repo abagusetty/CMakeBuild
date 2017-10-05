@@ -6,7 +6,7 @@ build infrastructure common to the NWChemEx project in such a manner that it:
 
 1. avoids copy/pasting,
 2. facilitates uniform maintable builds for all dependencies,
-3. and is cutomizable on a per dependency basis.
+3. is cutomizable on a per dependency basis
 
 If you are building a library that is meant to provide core NWChemEx
 functionality it is strongly recommended you use this repository to save
@@ -56,13 +56,13 @@ How To Use
 0. "Install" [git subrepo](https://github.com/ingydotnet/git-subrepo) if you
    haven't already (it's just a bash script)
 1. In the top-level directory of your project run:
-   ```git
+   ~~~git
    git subrepo clone https://github.com/NWChemEx-Project/NWChemExBase
-   ```
+   ~~~
 2. In the same directory run:
-   ```bash
+   ~~~bash
    ./NWChemExBase/bin/BasicSetup.sh <MyRepo>
-   ```
+   ~~~
 3. Add your dependencies to `CMakeLists.txt`
 4. Fill in the source files and public headers of your library in
    `MyRepo/CMakeLists.txt`

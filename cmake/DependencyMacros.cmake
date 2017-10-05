@@ -5,7 +5,8 @@
 ################################################################################
 
 #
-# Macro for finding a dependency.  It is assumed that whatever name is given
+# Macro for finding a dependency that is presumed built.  It is assumed that
+# whatever name is given
 # to this macro, is a name that can be directly fed to CMake's find_package
 # macro.  Furthermore it is assumed that the result is given back as the
 # standard variables, e.g.

@@ -19,9 +19,12 @@ get_filename_component(INSTALL_ROOT "${INSTALL_ROOT}" DIRECTORY) #root/
 set(__name @NWCHEMEX_LIBRARY_NAME@)
 string(TOUPPER ${__name} __NAME)
 
-#Find the actual library
-find_library(${__NAME}_LIBRARY lib${__name}.so
-             PATHS ${INSTALL_ROOT}/lib/${__name})
+#Find the actual library (if there is one)
+if(@HAS_LIBRARY@)
+    find_library(${__NAME}_LIBRARY lib${__name}.so
+                 PATHS ${INSTALL_ROOT}/lib/${__name})
+    FIND_PACKAGE_HANDLE_STANDARD_ARGS(${__NAME} DEFAULT_MSG ${__NAME}_LIBRARY)
+endif()
 
 #Find paths to all header files part of the public API
 set(__headers @NWCHEMEX_LIBRARY_HEADERS@)
@@ -39,9 +42,7 @@ foreach(__header_i ${__headers})
        set(${__NAME}_INCLUDE_DIR ${${__file_name}_INCLUDE_DIR})
    endif()
 endforeach()
-
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(${__NAME} DEFAULT_MSG ${__NAME}_LIBRARY
-                                                       "${${__name}_HEADERS}")
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(${__NAME} DEFAULT_MSG  "${${__name}_HEADERS}")
 
 #find_package will only crash for a variable of the same case
 set(${__name}_FOUND ${${__NAME}_FOUND})

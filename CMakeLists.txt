@@ -25,6 +25,11 @@ option_w_default(BUILD_SHARED_LIBS TRUE)
 bundle_cmake_args(CORE_CMAKE_OPTIONS CMAKE_CXX_COMPILER CMAKE_C_COMPILER
     CMAKE_BUILD_TYPE BUILD_SHARED_LIBS CMAKE_INSTALL_PREFIX CMAKE_CXX_STANDARD)
 
+bundle_cmake_list(CORE_CMAKE_LISTS CMAKE_PREFIX_PATH CMAKE_INSTALL_RPATH
+    CMAKE_MODULE_PATH)
+
+bundle_cmake_strings(CORE_CMAKE_STRINGS CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG)
+
 ################################################################################
 #
 # Handle NWChemEx's special options, report their values.
@@ -73,10 +78,8 @@ ExternalProject_Add(${PROJECT_NAME}_External
                ${CORE_CMAKE_OPTIONS}
     BUILD_ALWAYS 1
     INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${STAGE_DIR}
-    CMAKE_CACHE_ARGS -DCMAKE_PREFIX_PATH:LIST=${CMAKE_PREFIX_PATH}
-                     -DCMAKE_INSTALL_RPATH:LIST=${CMAKE_INSTALL_RPATH}
-                     -DCMAKE_MODULE_PATH:LIST=${CMAKE_MODULE_PATH}
-                     -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
+    CMAKE_CACHE_ARGS ${CORE_CMAKE_LISTS}
+                     ${CORE_CMAKE_STRINGS}
                      -DNWCHEMEX_LIBRARY_LIBRARIES:STRING=${NWCHEMEX_LIBRARY_LIBRARIES}
                      -DNWCHEMEX_LIBRARY_INCLUDE_DIRS:STRING=${NWCHEMEX_LIBRARY_INCLUDE_DIRS}
                      -DNWCHEMEX_LIBRARY_DEPENDS:STRING=${NWCHEMEX_LIBRARY_DEPENDS}
@@ -104,6 +107,7 @@ if(NOT NWCHEMEXLIBRARYBASE_FOUND)
 else() # Add a fake target so we don't need if statements
     add_library(NWChemExBase_External INTERFACE)
 endif()
+add_dependencies(NWChemExBase_External ${PROJECT_NAME}_External)
 
 ################################################################################
 #                                                                              #
@@ -122,12 +126,10 @@ if(${BUILD_TESTS})
         INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${TEST_STAGE_DIR}
         CMAKE_CACHE_ARGS -DCMAKE_PREFIX_PATH:LIST=${CMAKE_PREFIX_PATH}
                          -DCMAKE_INSTALL_RPATH:LIST=${CMAKE_INSTALL_RPATH}
-                         -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
                          -DCMAKE_MODULE_PATH:LIST=${CMAKE_MODULE_PATH}
+                         ${CORE_CMAKE_STRINGS}
     )
-    add_dependencies(${PROJECT_NAME}_TEST ${PROJECT_NAME}_External
-                                          NWChemExBase_External
-    )
+    add_dependencies(${PROJECT_NAME}_TEST NWChemExBase_External)
 
     # This file will allow us to run ctest in the top-level build dir
     # Basically it just defers to the actual top-level CTestTestfile.cmake in the

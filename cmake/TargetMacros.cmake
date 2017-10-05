@@ -47,10 +47,16 @@ function(nwchemex_add_library __name __srcs __headers __flags)
     set(__headers_copy ${${__headers}})
     make_full_paths(__srcs_copy)
     make_full_paths(__headers_copy)
-    add_library(${__name} SHARED ${__srcs_copy})
-    nwchemex_set_up_target(${__name} "${__flags}"
-                         "${NWCHEMEX_LIBRARY_INCLUDE_DIRS}"
-                         "${NWCHEMEX_LIBRARY_LIBRARIES}" lib/${__name})
+    if(NOT ${__srcs_copy} STREQUAL "")#Only add a library if we have sources
+        message(STATUS ${__srcs_copy})
+        add_library(${__name} SHARED ${__srcs_copy})
+        nwchemex_set_up_target(${__name} "${__flags}"
+                              "${NWCHEMEX_LIBRARY_INCLUDE_DIRS}"
+                             "${NWCHEMEX_LIBRARY_LIBRARIES}" lib/${__name})
+        set(HAS_LIBRARY TRUE)
+    else()
+        set(HAS_LIBRARY FALSE)
+    endif()
     set(NWCHEMEX_LIBRARY_NAME ${__name})
     set(NWCHEMEX_LIBRARY_HEADERS ${${__headers}})
     configure_file("${DIR_OF_TARGET_MACROS}/NWChemExTargetConfig.cmake.in"
@@ -81,6 +87,7 @@ function(nwchemex_add_test __name __test_file __target)
     add_executable(${__name} ${__file_copy})
     nwchemex_set_up_target(${__name} "" "${__target}" "${__target}" "tests")
     add_test(NAME ${__name} COMMAND ./${__name})
+    target_include_directories(${__name} PRIVATE ${CatchEx_INCLUDE_DIRS})
     install(FILES ${CMAKE_BINARY_DIR}/CTestTestfile.cmake DESTINATION tests)
 endfunction()
 
