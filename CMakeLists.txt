@@ -40,20 +40,6 @@ option_w_default(BUILD_TESTS TRUE)
 
 ################################################################################
 #
-# Find the dependencies of the project.  Assign their libraries to
-# NWCHEMEX_LIBRARY_LIBRARIES and their includes to NWCHEMEX_LIBRARY_INCLUDE_DIRS
-#
-################################################################################
-include(DependencyMacros)
-foreach(depend ${NWCHEMEX_LIBRARY_DEPENDS})
-    find_dependency(${depend} NWCHEMEX_LIBRARY_INCLUDE_DIRS
-                              NWCHEMEX_LIBRARY_LIBRARIES
-                              NWCHEMEX_LIBRARY_DEFINITIONS
-                              REQUIRED)
-endforeach()
-
-################################################################################
-#
 # Configure some options that tell us where things for the super project are
 #
 ################################################################################
@@ -63,15 +49,27 @@ set(SUPER_PROJECT_SRC ${SUPER_PROJECT_ROOT}/${PROJECT_NAME})
 set(SUPER_PROJECT_TEST ${SUPER_PROJECT_ROOT}/${PROJECT_NAME}_Test)
 set(STAGE_DIR ${CMAKE_BINARY_DIR}/stage)
 set(STAGE_INSTALL_DIR ${STAGE_DIR}${CMAKE_INSTALL_PREFIX})
-#We use a different dir so it doesn't get installed
+#We use a different dir so tests don't get installed
 set(TEST_STAGE_DIR ${CMAKE_BINARY_DIR}/test_stage)
+
+################################################################################
+#
+# Find the dependencies of the project.  Assign their libraries to
+# NWCHEMEX_LIBRARY_LIBRARIES and their includes to NWCHEMEX_LIBRARY_INCLUDE_DIRS
+#
+################################################################################
+include(DependencyMacros)
+include(ExternalProject)
+foreach(depend ${NWCHEMEX_LIBRARY_DEPENDS})
+    find_or_build_dependency(${depend})
+endforeach()
 
 ################################################################################
 #
 # Build the main library
 #
 ################################################################################
-include(ExternalProject)
+
 ExternalProject_Add(${PROJECT_NAME}_External
     SOURCE_DIR ${SUPER_PROJECT_SRC}
     CMAKE_ARGS -DSUPER_PROJECT_ROOT=${SUPER_PROJECT_ROOT}
@@ -84,6 +82,9 @@ ExternalProject_Add(${PROJECT_NAME}_External
                      -DNWCHEMEX_LIBRARY_INCLUDE_DIRS:STRING=${NWCHEMEX_LIBRARY_INCLUDE_DIRS}
                      -DNWCHEMEX_LIBRARY_DEPENDS:STRING=${NWCHEMEX_LIBRARY_DEPENDS}
 )
+foreach(depend ${NWCHEMEX_LIBRARY_DEPENDS})
+    add_dependencies(${PROJECT_NAME}_External ${depend})
+endforeach()
 
 ################################################################################
 #                                                                              #
