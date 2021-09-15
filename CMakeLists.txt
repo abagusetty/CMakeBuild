@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.18.0)
 project(CMakeBuild VERSION 0.0.0 LANGUAGES C CXX Fortran)
 
 include( FetchContent )
-set(LAM_GIT_TAG f6629057033a9dd31416b259f83233340106fa78)
+set(LAM_GIT_TAG 0c2effde6fa0c87eaeb961eeb412d8cca27bf4cb)
 if(ENABLE_DEV_MODE)
   set(LAM_GIT_TAG main)
 endif()
