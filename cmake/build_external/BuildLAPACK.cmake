@@ -4,7 +4,7 @@ find_or_build_dependency(BLAS)
 package_dependency(BLAS DEPENDENCY_PATHS)
 
 set(LAPACK_URL https://github.com/Reference-LAPACK/lapack.git)
-set(LAPACK_GIT_TAG 8960228bf20c3d5bf718ebd63e92041992bf29d9)
+set(LAPACK_GIT_TAG 79aa0f2e0641cd48b27c7fc9a96922bf033193fa)
 if(ENABLE_DEV_MODE)
   set(LAPACK_GIT_TAG master)
 endif()
@@ -21,6 +21,12 @@ else()
 endif()
 set(CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} ${LAPACK_FLAGS}")
 
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "Cray")
+    message(STATUS "Detected Cray Fortran compiler!")
+else()
+    set(LAPACK_F_FLAGS ${LAPACK_FLAGS})
+endif()
+
 set(LAPACK_BUILD_INDEX64 "-DBUILD_INDEX64=ON")
 if(BLAS_INT4)
     set(LAPACK_BUILD_INDEX64 "-DBUILD_INDEX64=OFF")
@@ -35,7 +41,7 @@ ExternalProject_Add(LAPACK_External
                    -DBLAS_LIBRARIES=${BLAS_LIBRARIES}
                    -DBUILD_TESTING=OFF
                    -DCMAKE_C_FLAGS=${LAPACK_FLAGS}
-                   -DCMAKE_Fortran_FLAGS=${LAPACK_FLAGS}
+                   -DCMAKE_Fortran_FLAGS=${LAPACK_F_FLAGS}
                    -DLAPACKE=OFF
                    ${LAPACK_BUILD_INDEX64}
         INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install #DESTDIR=${STAGE_DIR}

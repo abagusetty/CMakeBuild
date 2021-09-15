@@ -11,7 +11,7 @@ endforeach()
 
 # set(ScaLAPACK_URL https://github.com/Reference-ScaLAPACK/scalapack)
 set(ScaLAPACK_URL https://github.com/NWChemEx-Project/scalapack)
-set(SL_GIT_TAG 61c60f570666d5324d086dec37287ffe920e115d)
+set(SL_GIT_TAG 7eac1cf82c90de6b15e507ef2525df475030dd4f)
 if(ENABLE_DEV_MODE)
   set(SL_GIT_TAG master)
 endif()
@@ -27,7 +27,13 @@ else()
     set(ScaLAPACK_FLAGS "-march=native SCALAPACK_F_FLAGS")
 endif()
 set(CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} ${ScaLAPACK_FLAGS}")
-set(SCALAPACK_F_FLAGS ${SCALAPACK_FLAGS})
+
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "Cray")
+    message(STATUS "Detected Cray Fortran compiler!")
+else()
+    set(SCALAPACK_F_FLAGS ${SCALAPACK_FLAGS})
+endif()
+
 
 if(NOT BLAS_INT4)
     set(ScaLAPACK_BUILD_INDEX64 "-DInt=long")

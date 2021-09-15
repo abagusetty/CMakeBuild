@@ -13,6 +13,11 @@ enable_language(C)
 
 set(DEP_ABUILD "GauXC" "Eigen3" "LibInt2" "HPTT" "HDF5" "TALSH" "GlobalArrays" "TAMM") # "BLIS" "AntlrCppRuntime"
 set(DEP_ABUILD_MISC "MSGSL" "NJSON" "DOCTEST")
+if("${LINALG_VENDOR}" STREQUAL "BLIS")
+    list(APPEND DEP_ABUILD "BLAS" "LAPACK")
+elseif("${LINALG_VENDOR}" STREQUAL "IBMESSL")
+    list(APPEND DEP_ABUILD "LAPACK")
+endif()
 list(APPEND DEP_ABUILD ${DEP_ABUILD_MISC})
 if(USE_GA_AT)
     set(DEP_ABUILD "Eigen3" "LibInt2" "HPTT" "HDF5" "TALSH")

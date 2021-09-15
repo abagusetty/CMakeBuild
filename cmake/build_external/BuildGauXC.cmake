@@ -60,7 +60,7 @@
         endif()
     endif()
 
-    set(GXC_GIT_TAG e85fae64044e3bdd04a7650a22eb4b0e33c159ef)
+    set(GXC_GIT_TAG 8642cddc684a12bf9b0c0126cb45eb3818bb77e2)
     if(ENABLE_DEV_MODE)
       set(GXC_GIT_TAG master)
     endif()
