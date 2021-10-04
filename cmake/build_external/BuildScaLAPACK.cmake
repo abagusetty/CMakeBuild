@@ -9,9 +9,8 @@ foreach(depend BLAS LAPACK)
 endforeach()
 
 
-# set(ScaLAPACK_URL https://github.com/Reference-ScaLAPACK/scalapack)
-set(ScaLAPACK_URL https://github.com/NWChemEx-Project/scalapack)
-set(SL_GIT_TAG 7eac1cf82c90de6b15e507ef2525df475030dd4f)
+set(ScaLAPACK_URL https://github.com/Reference-ScaLAPACK/scalapack.git)
+set(SL_GIT_TAG ea5d20668a6b8bbee645b7ffe44623c623969d33)
 if(ENABLE_DEV_MODE)
   set(SL_GIT_TAG master)
 endif()
