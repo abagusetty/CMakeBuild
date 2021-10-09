@@ -12,7 +12,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
 
     option_w_default(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
-    option_w_default(BLAS_INT4 OFF)
+    option_w_default(BLAS_INT4 ON)
     option_w_default(LINALG_VENDOR BLIS)
     option_w_default(ENABLE_COVERAGE OFF)
     option_w_default(CMAKE_CXX_EXTENSIONS OFF)
@@ -83,6 +83,10 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
 
     if(NOT BLAS_INT4 AND USE_SCALAPACK) # AND NOT "${LINALG_VENDOR}" STREQUAL "IntelMKL")
         message( FATAL_ERROR "ScaLAPACK build with ILP64 interface is currently not supported. Please set -DBLAS_INT4=ON" )
+    endif()
+
+    if(NOT BLAS_INT4 AND USE_GAUXC)
+        message( FATAL_ERROR "GauXC build with ILP64 interface is currently not supported. Please set -DBLAS_INT4=ON" )
     endif()
 
     print_banner("Configuration Options")
@@ -178,6 +182,10 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
         if(ENABLE_COVERAGE)
             list(APPEND TAMM_CXX_FLAGS --coverage -O0)
             list(APPEND TAMM_EXTRA_LIBS --coverage)
+        endif()
+
+        if(USE_GAUXC)
+            list(APPEND TAMM_CXX_FLAGS -DUSE_GAUXC)
         endif()
 
         if(USE_CUDA)
