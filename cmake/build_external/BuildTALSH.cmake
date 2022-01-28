@@ -1,11 +1,11 @@
 
-set(TALSH_GIT_TAG 9d7ac81fef8dfde7c17c9cfddfd3c4705a2be506)
+set(TALSH_GIT_TAG b9b1f3ce929a7e6a5e407328c9b960bd0a72e1f3)
 if(ENABLE_DEV_MODE)
   set(TALSH_GIT_TAG master)
 endif()
 
 ExternalProject_Add(TALSH_External
-    GIT_REPOSITORY https://github.com/ajaypanyala/TAL_SH.git
+    GIT_REPOSITORY https://github.com/DmitryLyakh/TAL_SH.git
     GIT_TAG ${TALSH_GIT_TAG}
     UPDATE_DISCONNECTED 1
     CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} -DUSE_OPENMP=${USE_OPENMP} -DUSE_HIP=${USE_HIP}
