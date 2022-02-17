@@ -22,13 +22,6 @@ endif()
 
 # append platform-specific optimization options for non-Debug builds
 set(LIBINT_EXTRA_FLAGS "-Wno-unused-variable")
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-    set(LIBINT_EXTRA_FLAGS "-xHost ${LIBINT_EXTRA_FLAGS}")
-elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "ppc64le")
-    set(LIBINT_EXTRA_FLAGS "-mtune=native ${LIBINT_EXTRA_FLAGS}")
-else()
-    set(LIBINT_EXTRA_FLAGS "-march=native ${LIBINT_EXTRA_FLAGS}")
-endif()
 set(CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} ${LIBINT_EXTRA_FLAGS}")
 
 ExternalProject_Add(LibInt2_External

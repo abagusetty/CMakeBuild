@@ -127,7 +127,7 @@ else()
     endif()
 
     set(GA_REPO "https://github.com/GlobalArrays/ga.git")
-    set(GA_GIT_TAG 22ae3b5eb798f494ba40005dce0f582cfaebd258)
+    set(GA_GIT_TAG 0c45c82487d550668a8a3af6d402386313c94e89)
     if(USE_GA_DEV)
         set(GA_REPO "https://github.com/ajaypanyala/ga.git")
         set(GA_GIT_TAG develop)

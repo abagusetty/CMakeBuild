@@ -21,16 +21,9 @@ if(CMAKE_POSITION_INDEPENDENT_CODE)
     string_concat(FPIC_LIST "" " " BLIS_FLAGS)
 endif()
 
-set(BLIS_TAR https://github.com/flame/blis/archive/0.8.1.tar.gz)
+# set(BLIS_TAR https://github.com/flame/blis/archive/0.8.1.tar.gz)
 
-set(BLIS_OPT_FLAGS -march=native)
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-    set(BLIS_OPT_FLAGS -xHost)
-elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "ppc64le")
-    set(BLIS_OPT_FLAGS -mtune=native)
-endif()
-
-set(BLIS_OPT_FLAGS "${BLIS_FLAGS} ${BLIS_OPT_FLAGS}")
+set(BLIS_OPT_FLAGS "${BLIS_FLAGS}")
 
 # set(BLIS_W_OPENMP no)
 # if(USE_OPENMP) #Requires FindRefBLAS to find openmp if enabled
@@ -46,7 +39,9 @@ endif()
 set(BLIS_MISC_OPTIONS --without-memkind)
 
 ExternalProject_Add(BLAS_External
-        URL ${BLIS_TAR}
+        GIT_REPOSITORY https://github.com/flame/blis.git
+        GIT_TAG 35195bb5cea5d99eb3eaf41e3815137d14ceb52d
+        UPDATE_DISCONNECTED 1
         CONFIGURE_COMMAND ./configure --prefix=${CMAKE_INSTALL_PREFIX}
                                       CXX=${CMAKE_CXX_COMPILER}
                                       CC=${CMAKE_C_COMPILER}

@@ -9,22 +9,9 @@ if(ENABLE_DEV_MODE)
   set(LAPACK_GIT_TAG master)
 endif()
 
-# append platform-specific optimization options for non-Debug builds
-# set(LAPACK_FLAGS "-Wno-unused-variable")
-
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-    set(LAPACK_FLAGS "-xHost ${LAPACK_FLAGS}")
-elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "ppc64le")
-    set(LAPACK_FLAGS "-mtune=native ${LAPACK_FLAGS}")
-else()
-    set(LAPACK_FLAGS "-march=native ${LAPACK_FLAGS}")
-endif()
-set(CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} ${LAPACK_FLAGS}")
 
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "Cray")
     message(STATUS "Detected Cray Fortran compiler!")
-else()
-    set(LAPACK_F_FLAGS ${LAPACK_FLAGS})
 endif()
 
 set(LAPACK_BUILD_INDEX64 "-DBUILD_INDEX64=ON")
@@ -40,8 +27,8 @@ ExternalProject_Add(LAPACK_External
                    -DUSE_OPTIMIZED_BLAS=ON
                    -DBLAS_LIBRARIES=${BLAS_LIBRARIES}
                    -DBUILD_TESTING=OFF
-                   -DCMAKE_C_FLAGS=${LAPACK_FLAGS}
-                   -DCMAKE_Fortran_FLAGS=${LAPACK_F_FLAGS}
+                   -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS_INIT}
+                   -DCMAKE_Fortran_FLAGS=${CMAKE_Fortran_FLAGS_INIT}
                    -DLAPACKE=OFF
                    ${LAPACK_BUILD_INDEX64}
         INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install #DESTDIR=${STAGE_DIR}

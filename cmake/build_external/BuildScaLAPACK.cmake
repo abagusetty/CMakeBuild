@@ -15,28 +15,18 @@ if(ENABLE_DEV_MODE)
   set(SL_GIT_TAG master)
 endif()
 
-# append platform-specific optimization options for non-Debug builds
-# set(ScaLAPACK_FLAGS "-Wno-unused-variable -O3")
-
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-    set(ScaLAPACK_FLAGS "-xHost ${ScaLAPACK_FLAGS}")
-elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "ppc64le")
-    set(ScaLAPACK_FLAGS "-mtune=native ${ScaLAPACK_FLAGS}")
-else()
-    set(ScaLAPACK_FLAGS "-march=native SCALAPACK_F_FLAGS")
-endif()
-set(CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} ${ScaLAPACK_FLAGS}")
 
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "Cray")
     message(STATUS "Detected Cray Fortran compiler!")
-else()
-    set(SCALAPACK_F_FLAGS ${SCALAPACK_FLAGS})
 endif()
 
+# set(ScaLAPACK_C_FLAGS "-Wno-unused-variable -O3")
+set(ScaLAPACK_C_FLAGS "${CMAKE_C_FLAGS_INIT}")
+set(ScaLAPACK_F_FLAGS "${CMAKE_Fortran_FLAGS_INIT}")
 
 if(NOT BLAS_INT4)
     set(ScaLAPACK_BUILD_INDEX64 "-DInt=long")
-    set(ScaLAPACK_FLAGS "-DInt=long ${ScaLAPACK_FLAGS}")
+    set(ScaLAPACK_C_FLAGS "-DInt=long ${ScaLAPACK_C_FLAGS}")
     if( CMAKE_Fortran_COMPILER_ID MATCHES "GNU" OR CMAKE_Fortran_COMPILER_ID MATCHES "Flang" )
         set( _FFD8 "-fdefault-integer-8" )
     elseif( CMAKE_Fortran_COMPILER_ID MATCHES "PGI" )
@@ -56,7 +46,7 @@ ExternalProject_Add(ScaLAPACK_External
                    -DSCALAPACK_BUILD_TESTING=OFF
                    -DUSE_OPTIMIZED_LAPACK_BLAS=ON
                    #-DBUILD_SHARED_LIBS=OFF
-                   -DCMAKE_C_FLAGS=${SCALAPACK_FLAGS}
+                   -DCMAKE_C_FLAGS=${ScaLAPACK_C_FLAGS}
                    -DCMAKE_Fortran_FLAGS=${SCALAPACK_F_FLAGS}
                 #    -DBLAS_LIBRARIES=${BLAS_LIBRARIES}
                 #    -DLAPACK_LIBRARIES=${LAPACK_LIBRARIES}

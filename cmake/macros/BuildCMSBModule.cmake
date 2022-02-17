@@ -9,6 +9,9 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     include(DependencyMacros)
     include(ExternalProject)
     include(UtilityMacros)
+    include(CheckCCompilerFlag)
+    include(CheckCXXCompilerFlag)
+    include(CheckFortranCompilerFlag)
 
     option_w_default(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -63,23 +66,49 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     endif()
 
     if(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-        set(CMSB_EXTRA_FLAGS "-xHost")
+        set(CMSB_MARCH_FLAGS "-xHost")
     elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "ppc64le")
-        set(CMSB_EXTRA_FLAGS "-mtune=native")
+        set(CMSB_MARCH_FLAGS "-mtune=native")
         if(USE_CUDA)
             #nvcc does not recgonize -mtune=power9
-            set(CMSB_EXTRA_FLAGS "-mtune=powerpc64le")
+            set(CMSB_MARCH_FLAGS "-mtune=powerpc64le")
         endif()
+    #elseif(CMAKE_CXX_COMPILER_ID STREQUAL "ARMClang")
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64") 
+        set(CMSB_MARCH_FLAGS "-mcpu=native")
     else()
-        set(CMSB_EXTRA_FLAGS "-march=native")
+        set(CMSB_MARCH_FLAGS "-march=native")
     endif()
 
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall ${CMSB_EXTRA_FLAGS}")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall ${CMSB_EXTRA_FLAGS}")
-    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -Wall ${CMSB_EXTRA_FLAGS}")
+    check_c_compiler_flag("${CMSB_MARCH_FLAGS}" __C_COMPILER_SUPPORTS_MARCH)
+    if(__C_COMPILER_SUPPORTS_MARCH)
+        set(CMSB_EXTRA_FLAGS "${CMSB_MARCH_FLAGS}")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall ${CMSB_EXTRA_FLAGS}")
+        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall ${CMSB_EXTRA_FLAGS}")
+        set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -Wall ${CMSB_EXTRA_FLAGS}")
+    endif()
+
+    check_cxx_compiler_flag("${CMSB_MARCH_FLAGS}" __CXX_COMPILER_SUPPORTS_MARCH)
+    if(__CXX_COMPILER_SUPPORTS_MARCH)
+        set(CMSB_EXTRA_FLAGS "${CMSB_MARCH_FLAGS}")
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall ${CMSB_EXTRA_FLAGS}")
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall ${CMSB_EXTRA_FLAGS}")
+        set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -Wall ${CMSB_EXTRA_FLAGS}")
+    endif()
+
+    check_fortran_compiler_flag("${CMSB_MARCH_FLAGS}" __Fort_COMPILER_SUPPORTS_MARCH)
+    if(__Fort_COMPILER_SUPPORTS_MARCH)
+        set(CMSB_EXTRA_FLAGS "${CMSB_MARCH_FLAGS}")
+        set(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG} -Wall ${CMSB_EXTRA_FLAGS}")
+        set(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE} -Wall ${CMSB_EXTRA_FLAGS}")
+        set(CMAKE_Fortran_FLAGS_RELWITHDEBINFO "${CMAKE_Fortran_FLAGS_RELWITHDEBINFO} -Wall ${CMSB_EXTRA_FLAGS}")
+    endif()
+
 
     string(TOUPPER ${CMAKE_BUILD_TYPE} CMSB_CMAKE_BUILD_TYPE)
+    set(CMSB_C_FLAGS CMAKE_C_FLAGS_${CMSB_CMAKE_BUILD_TYPE})
     set(CMSB_CXX_FLAGS CMAKE_CXX_FLAGS_${CMSB_CMAKE_BUILD_TYPE})
+    set(CMSB_Fortran_FLAGS CMAKE_Fortran_FLAGS_${CMSB_CMAKE_BUILD_TYPE})
 
     if(NOT BLAS_INT4 AND USE_SCALAPACK) # AND NOT "${LINALG_VENDOR}" STREQUAL "IntelMKL")
         message( FATAL_ERROR "ScaLAPACK build with ILP64 interface is currently not supported. Please set -DBLAS_INT4=ON" )
@@ -117,7 +146,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
 
     set(SUPER_PROJECT_BINARY_DIR ${CMAKE_BINARY_DIR})
     set(CMSB_CORE_OPTIONS CMAKE_CXX_COMPILER CMAKE_C_COMPILER SUPER_PROJECT_BINARY_DIR
-        CMAKE_Fortran_COMPILER CMAKE_BUILD_TYPE BUILD_SHARED_LIBS ${CMSB_CXX_FLAGS}
+        CMAKE_Fortran_COMPILER CMAKE_BUILD_TYPE BUILD_SHARED_LIBS ${CMSB_C_FLAGS} ${CMSB_CXX_FLAGS} ${CMSB_Fortran_FLAGS}
         CMAKE_INSTALL_PREFIX CMAKE_CXX_STANDARD CMAKE_VERSION PROJECT_VERSION
         CMAKE_POSITION_INDEPENDENT_CODE CMAKE_VERBOSE_MAKEFILE CMAKE_CXX_EXTENSIONS
         CMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY CMAKE_EXPORT_COMPILE_COMMANDS 
@@ -131,7 +160,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     bundle_cmake_list(CORE_CMAKE_LISTS CMAKE_PREFIX_PATH CMAKE_MODULE_PATH 
                          CMSB_LAM_PATH CMAKE_INSTALL_RPATH_USE_LINK_PATH)
 
-    bundle_cmake_strings(CORE_CMAKE_STRINGS ${CMSB_CXX_FLAGS})
+    bundle_cmake_strings(CORE_CMAKE_STRINGS ${CMSB_C_FLAGS} ${CMSB_CXX_FLAGS} ${CMSB_Fortran_FLAGS})
 
     bundle_cmake_args(DEPENDENCY_CMAKE_OPTIONS ${CMSB_CORE_OPTIONS})
 
@@ -217,7 +246,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
             endif()
         endif()
 
-        bundle_cmake_strings(CORE_CMAKE_STRINGS ${CMSB_CXX_FLAGS})
+        bundle_cmake_strings(CORE_CMAKE_STRINGS ${CMSB_C_FLAGS} ${CMSB_CXX_FLAGS} ${CMSB_Fortran_FLAGS})
         #Cache only for writing to package configuration files.
         bundle_cmake_strings(CORE_CMAKE_STRINGS TAMM_CXX_FLAGS)
 
