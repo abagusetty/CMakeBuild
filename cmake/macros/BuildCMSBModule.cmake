@@ -223,7 +223,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
 
         if(USE_CUDA)
             list(APPEND TAMM_CXX_FLAGS -DUSE_CUDA -DUSE_TALSH)
-            if(NV_GPU_ARCH GREATER_EQUAL 80)
+            if(GPU_ARCH GREATER_EQUAL 80)
                 list(APPEND TAMM_CXX_FLAGS -DUSE_NV_TC)
             endif()
         elseif(USE_HIP)
@@ -283,7 +283,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
 
         bundle_cmake_strings(CORE_CMAKE_STRINGS USE_DPCPP SYCL_TBE)
         bundle_cmake_strings(CORE_CMAKE_STRINGS USE_HIP ROCM_ROOT)
-        bundle_cmake_strings(CORE_CMAKE_STRINGS USE_CUDA NV_GPU_ARCH CUDA_MAXREGCOUNT)
+        bundle_cmake_strings(CORE_CMAKE_STRINGS USE_CUDA GPU_ARCH CUDA_MAXREGCOUNT)
 
         if(USE_CUDA)
             # if(NOT USE_OPENMP)
