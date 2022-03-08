@@ -10,7 +10,7 @@ endforeach()
 
 
 set(ScaLAPACK_URL https://github.com/Reference-ScaLAPACK/scalapack.git)
-set(SL_GIT_TAG ea5d20668a6b8bbee645b7ffe44623c623969d33)
+set(SL_GIT_TAG d4d0066c041cf19a23f8b3aa62fbcf5f0a33c166)
 if(ENABLE_DEV_MODE)
   set(SL_GIT_TAG master)
 endif()
