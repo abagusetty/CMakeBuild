@@ -386,9 +386,9 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
             file(APPEND ${CMAKE_BINARY_DIR}/CTestTestfile.cmake
                     "\nsubdirs(methods_stage${CMAKE_INSTALL_PREFIX}/methods)")
 
-            install(DIRECTORY ${METHODS_STAGE_DIR}${CMAKE_INSTALL_PREFIX}/
+            install(DIRECTORY ${METHODS_STAGE_DIR}${CMAKE_INSTALL_PREFIX}/methods/
                     DESTINATION ${CMAKE_INSTALL_PREFIX}/bin USE_SOURCE_PERMISSIONS
-                    PATTERN "methods/*.cmake" EXCLUDE)
+                    PATTERN "*.cmake" EXCLUDE)
         endif()        
     endforeach()
 
