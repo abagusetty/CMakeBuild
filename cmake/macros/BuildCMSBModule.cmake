@@ -385,16 +385,16 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
             # build directory for this project
             file(APPEND ${CMAKE_BINARY_DIR}/CTestTestfile.cmake
                     "\nsubdirs(methods_stage${CMAKE_INSTALL_PREFIX}/methods)")
+
+            install(DIRECTORY ${METHODS_STAGE_DIR}${CMAKE_INSTALL_PREFIX}/
+                    DESTINATION ${CMAKE_INSTALL_PREFIX}/bin USE_SOURCE_PERMISSIONS
+                    PATTERN "methods/*.cmake" EXCLUDE)
         endif()        
     endforeach()
 
     # Install the staging directory
     install(DIRECTORY ${STAGE_INSTALL_DIR}/
             DESTINATION ${CMAKE_INSTALL_PREFIX} USE_SOURCE_PERMISSIONS)
-
-    install(DIRECTORY ${METHODS_STAGE_DIR}${CMAKE_INSTALL_PREFIX}/
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/bin USE_SOURCE_PERMISSIONS
-            PATTERN "methods/*.cmake" EXCLUDE)
 
     if(${PROJECT_NAME} STREQUAL "TAMM")
         if(TARGET Libint2::cxx)
