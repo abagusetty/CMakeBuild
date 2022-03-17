@@ -392,6 +392,10 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     install(DIRECTORY ${STAGE_INSTALL_DIR}/
             DESTINATION ${CMAKE_INSTALL_PREFIX} USE_SOURCE_PERMISSIONS)
 
+    install(DIRECTORY ${METHODS_STAGE_DIR}${CMAKE_INSTALL_PREFIX}/
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/bin USE_SOURCE_PERMISSIONS
+            PATTERN "methods/*.cmake" EXCLUDE)
+
     if(${PROJECT_NAME} STREQUAL "TAMM")
         if(TARGET Libint2::cxx)
             get_target_property(LI_CD Libint2::cxx INTERFACE_COMPILE_DEFINITIONS)
