@@ -21,7 +21,7 @@ if(CMAKE_POSITION_INDEPENDENT_CODE)
     string_concat(FPIC_LIST "" " " BLIS_FLAGS)
 endif()
 
-# set(BLIS_TAR https://github.com/flame/blis/archive/0.8.1.tar.gz)
+set(BLIS_TAR https://github.com/flame/blis/archive/refs/tags/0.9.0.tar.gz)
 
 set(BLIS_OPT_FLAGS "${BLIS_FLAGS}")
 
@@ -39,9 +39,7 @@ endif()
 set(BLIS_MISC_OPTIONS --without-memkind)
 
 ExternalProject_Add(BLIS_External
-        GIT_REPOSITORY https://github.com/flame/blis.git
-        GIT_TAG 35195bb5cea5d99eb3eaf41e3815137d14ceb52d
-        UPDATE_DISCONNECTED 1
+        URL ${BLIS_TAR}
         CONFIGURE_COMMAND ./configure --prefix=${CMAKE_INSTALL_PREFIX}
                                       CXX=${CMAKE_CXX_COMPILER}
                                       CC=${CMAKE_C_COMPILER}

@@ -30,7 +30,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     option_w_default(USE_GA_DEV OFF)
     option_w_default(USE_GA_PROFILER OFF)
     option_w_default(USE_SCALAPACK OFF)
-    option_w_default(CUDA_MAXREGCOUNT 64)
+    option_w_default(CUDA_MAXREGCOUNT 128)
     option_w_default(BUILD_SHARED_LIBS OFF)
     option_w_default(ENABLE_DEV_MODE OFF)
 
