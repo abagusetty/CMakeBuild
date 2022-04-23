@@ -14,7 +14,7 @@ else()
     set(BLIS_CONFIG_HW ${BLIS_CONFIG})
 endif()
 
-string_concat(CMAKE_CXX_FLAGS_RELEASE "" " " BLIS_FLAGS)
+string_concat(CMAKE_C_FLAGS_RELEASE "" " " BLIS_FLAGS)
 
 if(CMAKE_POSITION_INDEPENDENT_CODE)
     set(FPIC_LIST "-fPIC")

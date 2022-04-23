@@ -1,4 +1,4 @@
-set(NJSON_GIT_TAG b5364faf9d732052506cefc933d3f4e4f04513a5)
+set(NJSON_GIT_TAG 1a90c9463aa5691b4a1fd5b746fedfbecebe57ff)
 if(ENABLE_DEV_MODE)
   set(NJSON_GIT_TAG develop)
 endif()

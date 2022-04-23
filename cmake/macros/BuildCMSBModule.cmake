@@ -25,6 +25,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     option_w_default(ENABLE_DPCPP ${USE_DPCPP})
     option_w_default(USE_CUDA OFF)
     option_w_default(USE_HIP OFF)
+    option_w_default(USE_HIPSYCL OFF)
     option_w_default(USE_CUTENSOR OFF)
     option_w_default(USE_GA_AT OFF)
     option_w_default(USE_GA_DEV OFF)
@@ -154,7 +155,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
         CMAKE_INSTALL_PREFIX CMAKE_CXX_STANDARD CMAKE_VERSION PROJECT_VERSION
         CMAKE_POSITION_INDEPENDENT_CODE CMAKE_VERBOSE_MAKEFILE CMAKE_CXX_EXTENSIONS
         CMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY CMAKE_EXPORT_COMPILE_COMMANDS 
-        MPIEXEC_EXECUTABLE PYTHON_EXECUTABLE)
+        MPIEXEC_EXECUTABLE PYTHON_EXECUTABLE CMAKE_CXX_FLAGS_INIT)
 
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
@@ -252,7 +253,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
 
         bundle_cmake_strings(CORE_CMAKE_STRINGS ${CMSB_C_FLAGS} ${CMSB_CXX_FLAGS} ${CMSB_Fortran_FLAGS})
         #Cache only for writing to package configuration files.
-        bundle_cmake_strings(CORE_CMAKE_STRINGS TAMM_CXX_FLAGS MARCH_FLAGS)
+        bundle_cmake_strings(CORE_CMAKE_STRINGS CMAKE_CXX_FLAGS_INIT TAMM_CXX_FLAGS MARCH_FLAGS)
 
         # if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         #     find_library(stdfs_LIBRARY 
@@ -282,7 +283,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
         endif()
 
         bundle_cmake_strings(CORE_CMAKE_STRINGS USE_DPCPP SYCL_TBE)
-        bundle_cmake_strings(CORE_CMAKE_STRINGS USE_HIP ROCM_ROOT)
+        bundle_cmake_strings(CORE_CMAKE_STRINGS USE_HIP ROCM_ROOT USE_HIPSYCL)
         bundle_cmake_strings(CORE_CMAKE_STRINGS USE_CUDA GPU_ARCH CUDA_MAXREGCOUNT)
 
         if(USE_CUDA)
