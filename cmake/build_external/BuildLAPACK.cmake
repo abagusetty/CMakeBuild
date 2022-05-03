@@ -29,7 +29,7 @@ ExternalProject_Add(LAPACK_External
                    -DBUILD_TESTING=OFF
                    -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS_INIT}
                    -DCMAKE_Fortran_FLAGS=${CMAKE_Fortran_FLAGS_INIT}
-                   -DLAPACKE=OFF
+                   -DLAPACKE=OFF -DTEST_FORTRAN_COMPILER=OFF
                    ${LAPACK_BUILD_INDEX64}
         INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install #DESTDIR=${STAGE_DIR}
         CMAKE_CACHE_ARGS ${DEPENDENCY_PATHS} ${CORE_CMAKE_LISTS} ${CORE_CMAKE_STRINGS}
