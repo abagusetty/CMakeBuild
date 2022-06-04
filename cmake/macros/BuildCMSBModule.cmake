@@ -36,6 +36,9 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     option_w_default(BUILD_SHARED_LIBS OFF)
     option_w_default(ENABLE_DEV_MODE OFF)
 
+    option_w_default(USE_UPCXX_DISTARRAY OFF)
+    option_w_default(USE_UPCXX ${USE_UPCXX_DISTARRAY})
+
     #Detect invalid combinations
     if(USE_CUDA AND USE_HIP)
       message(FATAL_ERROR "USE_CUDA and USE_HIP cannot be enabled simultaneously")
@@ -52,10 +55,6 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     endif()
 
     if(USE_DPCPP)
-        if(${CMAKE_MINOR_VERSION} EQUAL "19" AND ${CMAKE_PATCH_VERSION} LESS "2") 
-            message(FATAL_ERROR "DPCPP build does not work with CMake versions 3.19.0 and 3.19.1. \
-            Please use a version >= 3.19.2")
-        endif()
         if(USE_OPENMP)
           message(FATAL_ERROR "DPCPP build requires USE_OPENMP=OFF")
         endif()
@@ -262,6 +261,13 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
         if(USE_DPCPP)
             list(APPEND TAMM_CXX_FLAGS -DUSE_DPCPP) #-fsycl
         endif()      
+
+        if(USE_UPCXX)
+            list(APPEND TAMM_CXX_FLAGS -DUSE_UPCXX)
+            if(USE_UPCXX_DISTARRAY)
+                list(APPEND TAMM_CXX_FLAGS -DUSE_UPCXX_DISTARRAY)
+            endif()
+        endif()
 
         if(USE_GA_AT)
             bundle_cmake_strings(CORE_CMAKE_STRINGS USE_GA_AT)
