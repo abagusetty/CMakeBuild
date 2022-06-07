@@ -1,7 +1,7 @@
 include(AssertMacros)
 
-#There's no way to signal that the commented lines are intentional failures
-#uncomment o manually check
+#There is no way to signal that the commented lines are 
+#intentional failures. uncomment to manually check.
 
 set(this_is_true TRUE)
 assert(this_is_true)

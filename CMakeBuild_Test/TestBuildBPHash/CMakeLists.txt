@@ -1,5 +1,0 @@
-cmake_minimum_required(VERSION 3.6)
-project(TestBuildBPHash VERSION 1.0.0 LANGUAGES CXX)
-find_package(CMakeBuild)
-set(TestBuildBPHash_DEPENDENCIES bphash)
-build_cmsb_module(${CMAKE_CURRENT_LIST_DIR})

@@ -1,6 +1,0 @@
-cmake_minimum_required(VERSION ${CMAKE_VERSION})
-project(TestBuildGA VERSION ${PROJECT_VERSION} LANGUAGES CXX)
-include(TargetMacros)
-set(TestBuildGASRCS TestBuildGA.cpp)
-set(TestBuildGAHEADERS TestBuildGA.hpp)
-cmsb_add_library(TestBuildGA TestBuildGASRCS TestBuildGAHEADERS "" "")

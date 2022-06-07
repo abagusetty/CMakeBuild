@@ -18,7 +18,7 @@ set(CMSB_LAM_PATH ${linalg-cmake-modules_SOURCE_DIR})
 include(${CMAKE_CURRENT_LIST_DIR}/cmake/macros/BuildCMSBModule.cmake)
 
 if(NOT DEFINED BUILD_TESTS)
-    set(BUILD_TESTS OFF)
+  set(BUILD_TESTS OFF)
 endif()
 set(BUILD_METHODS OFF)
 

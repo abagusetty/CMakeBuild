@@ -1,6 +1,0 @@
-cmake_minimum_required(VERSION 3.6)
-project(TestBuildGA VERSION 1.0.0 LANGUAGES CXX)
-find_package(CMakeBuild)
-set(TestBuildGA_DEPENDENCIES GlobalArrays)
-set(BUILD_GlobalArrays TRUE)
-build_cmsb_module(${CMAKE_CURRENT_LIST_DIR})

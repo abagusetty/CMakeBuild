@@ -1,6 +1,0 @@
-cmake_minimum_required(VERSION ${CMAKE_VERSION})
-project(TestDebugBuildType VERSION ${PROJECT_VERSION} LANGUAGES CXX)
-include(TargetMacros)
-set(TestDebugBuildTypeSRCS TestDebugBuildType.cpp)
-set(TestDebugBuildTypeHEADERS TestDebugBuildType.hpp)
-cmsb_add_library(TestDebugBuildType TestDebugBuildTypeSRCS TestDebugBuildTypeHEADERS "" "")
