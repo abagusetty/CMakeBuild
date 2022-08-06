@@ -11,8 +11,8 @@ include(OptionMacros)
 
 enable_language(C)
 
-set(DEP_ABUILD "GauXC" "Eigen3" "LibInt2" "HPTT" "HDF5" "TALSH" "Librett" "GlobalArrays" "TAMM") # "BLIS" "AntlrCppRuntime"
-set(DEP_ABUILD_MISC "MSGSL" "NJSON" "DOCTEST")
+set(DEP_ABUILD "GauXC" "Eigen3" "LibInt2" "HPTT" "HDF5" "TALSH" "GlobalArrays" "TAMM") # "BLIS" "AntlrCppRuntime"
+set(DEP_ABUILD_MISC "MSGSL" "NJSON" "DOCTEST" "Librett")
 if("${LINALG_VENDOR}" STREQUAL "BLIS")
     list(APPEND DEP_ABUILD "BLAS" "LAPACK")
 elseif("${LINALG_VENDOR}" STREQUAL "IBMESSL")
@@ -139,6 +139,8 @@ function(cmsb_find_dependency __name)
     set(_dep_name ${__name})
     if(${__name} STREQUAL "DOCTEST")
       set(_dep_name doctest)
+    elseif(${__name} STREQUAL "Librett")
+      set(_dep_name librett)
     elseif(${__name} STREQUAL "NJSON")
       set(_dep_name nlohmann_json)
     elseif(${__name} STREQUAL "MSGSL")
@@ -219,7 +221,8 @@ function(cmsb_find_dependency __name)
                     target_include_directories(${_tname} SYSTEM INTERFACE
                             ${${name_var}_INCLUDE_DIR})  
 
-                elseif(${__NAME} IN_LIST DEP_ABUILD_MISC)
+                elseif(${__name} IN_LIST DEP_ABUILD_MISC OR 
+                       ${__NAME} IN_LIST DEP_ABUILD_MISC)
                     set(${name_var}_LIBRARIES ${__dep_target_name})
                 endif()                
 

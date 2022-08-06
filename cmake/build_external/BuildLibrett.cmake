@@ -1,16 +1,16 @@
 
-set(LIBRETT_GIT_TAG cmake)
+set(LIBRETT_GIT_TAG master)
 if(ENABLE_DEV_MODE)
   set(LIBRETT_GIT_TAG master)
 endif()
 
 ExternalProject_Add(Librett_External
-    GIT_REPOSITORY https://github.com/ajaypanyala/Librett.git
+    GIT_REPOSITORY https://github.com/victor-anisimov/Librett.git
     GIT_TAG ${LIBRETT_GIT_TAG}
     UPDATE_DISCONNECTED 1
     CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} -DENABLE_SYCL=${USE_DPCPP}
     -DENABLE_CUDA=${USE_CUDA} -DENABLE_HIP=${USE_HIP} -DCMAKE_CUDA_ARCHITECTURES=${GPU_ARCH} 
-    -DROCM_ROOT=${ROCM_ROOT}
+    -DROCM_PATH=${ROCM_ROOT} -DENABLE_TESTS=OFF
     INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${STAGE_DIR}
     CMAKE_CACHE_ARGS ${CORE_CMAKE_LISTS}
                      ${CORE_CMAKE_STRINGS}
