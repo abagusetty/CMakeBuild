@@ -1,5 +1,5 @@
 
-set(MSGSL_GIT_TAG 2bfd4950802a223dde37a08a205812b6dfdfeb61)
+set(MSGSL_GIT_TAG 10df83d292bf5bbdc487e57dc8c2dc8c7a01f4d1)
 if(ENABLE_DEV_MODE)
   set(MSGSL_GIT_TAG main)
 endif()
