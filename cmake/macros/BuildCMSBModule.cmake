@@ -28,8 +28,8 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     option_w_default(USE_TALSH OFF)
     option_w_default(USE_HIPSYCL OFF)
     option_w_default(USE_CUTENSOR OFF)
-    option_w_default(USE_GA_AT OFF)
     option_w_default(USE_GA_DEV OFF)
+    option_w_default(USE_TAMM_DEV OFF)
     option_w_default(USE_GA_PROFILER OFF)
     option_w_default(USE_SCALAPACK OFF)
     option_w_default(CUDA_MAXREGCOUNT 128)
@@ -181,6 +181,12 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
         CMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY CMAKE_EXPORT_COMPILE_COMMANDS 
         MPIEXEC_EXECUTABLE PYTHON_EXECUTABLE CMAKE_CXX_FLAGS_INIT)
 
+    if(USE_CUDA)
+        bundle_cmake_args(CMSB_CORE_OPTIONS CMAKE_CUDA_ARCHITECTURES)
+    elseif(USE_HIP)
+        bundle_cmake_args(CMSB_CORE_OPTIONS CMAKE_HIP_ARCHITECTURES)
+    endif()
+    
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
     #Make a list of all CMake variables that should be passed to all dependencies
@@ -193,8 +199,44 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
 
     bundle_cmake_args(DEPENDENCY_CMAKE_OPTIONS ${CMSB_CORE_OPTIONS})
 
-
     bundle_cmake_args(DEPENDENCY_CMAKE_OPTIONS BLAS_INT4 LINALG_VENDOR LINALG_PREFIX ENABLE_COVERAGE USE_SCALAPACK)
+    bundle_cmake_args(DEPENDENCY_CMAKE_OPTIONS USE_UPCXX USE_UPCXX_DISTARRAY)
+    bundle_cmake_args(DEPENDENCY_CMAKE_OPTIONS BLIS_CONFIG GCCROOT HDF5_ROOT LibInt2_ROOT)
+
+    bundle_cmake_strings(CORE_CMAKE_STRINGS ENABLE_DEV_MODE GPU_ARCH MARCH_FLAGS USE_TAMM_DEV)
+    bundle_cmake_strings(CORE_CMAKE_STRINGS USE_DPCPP SYCL_TBE ENABLE_DPCPP DPCPP_ROOT)
+    bundle_cmake_strings(CORE_CMAKE_STRINGS USE_HIP ROCM_ROOT USE_HIPSYCL)
+    bundle_cmake_strings(CORE_CMAKE_STRINGS USE_CUDA USE_TALSH CUDA_MAXREGCOUNT)
+
+    if(USE_GA_DEV)
+        bundle_cmake_strings(CORE_CMAKE_STRINGS USE_GA_DEV)
+    endif()
+    if(USE_GA_PROFILER)
+        bundle_cmake_strings(CORE_CMAKE_STRINGS USE_GA_PROFILER)
+    endif()
+
+    if(CMAKE_CUDA_COMPILER_ID STREQUAL "Clang")
+        bundle_cmake_strings(CORE_CMAKE_STRINGS CMAKE_CUDA_COMPILER)
+    endif()
+
+    if(USE_OPENMP)
+        bundle_cmake_strings(CORE_CMAKE_STRINGS USE_OPENMP)
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
+            if("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Darwin" OR USE_DPCPP)
+                bundle_cmake_strings(CORE_CMAKE_STRINGS OpenMP_C_FLAGS OpenMP_CXX_FLAGS)
+                bundle_cmake_strings(CORE_CMAKE_STRINGS OpenMP_C_LIB_NAMES OpenMP_CXX_LIB_NAMES OpenMP_omp_LIBRARY OpenMP_libiomp5_LIBRARY)
+            endif()
+        endif()
+    endif()
+
+    # if(USE_CUTENSOR)
+    #     bundle_cmake_strings(CORE_CMAKE_STRINGS USE_CUTENSOR)
+    #     if(CUTENSOR_INSTALL_PREFIX)
+    #         bundle_cmake_strings(CORE_CMAKE_STRINGS CUTENSOR_INSTALL_PREFIX)
+    #     else()
+    #         message(FATAL_ERROR "USE_CUTENSOR=ON, but CUTENSOR_INSTALL_PREFIX not provided")
+    #     endif()
+    # endif()
 
     print_banner("Locating Dependencies and Creating Targets")
     ################################################################################
@@ -203,35 +245,17 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     #
     ################################################################################
 
-
-    bundle_cmake_strings(CORE_CMAKE_STRINGS LINALG_VENDOR ENABLE_DEV_MODE)
     set(DEPENDENCY_ROOT_DIRS)
 
     foreach(__project ${CMSB_PROJECTS})
         if(TAMM_CXX_FLAGS)
             string (REPLACE " " ";" TAMM_CXX_FLAGS "${TAMM_CXX_FLAGS}")
         endif()
-        list(APPEND TAMM_CXX_FLAGS ${CMSB_GCC_TOOLCHAIN_FLAG} -DOMPI_SKIP_MPICXX -DUSE_BLIS)
+        list(APPEND TAMM_CXX_FLAGS ${CMSB_GCC_TOOLCHAIN_FLAG} -DOMPI_SKIP_MPICXX)
 
         if (USE_SCALAPACK) 
           list(APPEND TAMM_CXX_FLAGS -DUSE_SCALAPACK)
         endif()
-
-        foreach(depend ${${__project}_DEPENDENCIES})
-            find_or_build_dependency(${depend})
-            are_we_building(${depend} were_building)
-            if(were_building)
-                list(APPEND DEPENDS_WERE_BUILDING ${depend})
-            else()
-                list(APPEND DEPENDS_WE_FOUND ${depend})
-                package_dependency(${depend} DEPENDENCY_PATHS)
-            endif()
-
-            is_valid(${depend}_ROOT __deproot_set)
-            if(__deproot_set)
-                bundle_cmake_args(DEPENDENCY_ROOT_DIRS ${depend}_ROOT)
-            endif()
-        endforeach()
 
         if(TAMM_EXTRA_LIBS)
           string (REPLACE " " ";" TAMM_EXTRA_LIBS "${TAMM_EXTRA_LIBS}")
@@ -255,7 +279,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
             list(APPEND TAMM_CXX_FLAGS -DUSE_HIP)
         endif()
         if(USE_TALSH)
-            list(APPEND TAMM_CXX_FLAGS -DUSE_TALSH)
+            list(APPEND TAMM_CXX_FLAGS -DUSE_TALSH -DUSE_BLIS)
         endif()
 
         if(USE_DPCPP)
@@ -269,14 +293,6 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
             endif()
         endif()
 
-        if(USE_GA_AT)
-            bundle_cmake_strings(CORE_CMAKE_STRINGS USE_GA_AT)
-            list(APPEND TAMM_CXX_FLAGS -DUSE_GA_AT)
-            if(NOT "${LINALG_VENDOR}" STREQUAL "IntelMKL")
-                message(FATAL_ERROR "USE_GA_AT=ON only works with LINALG_VENDOR=IntelMKL")
-            endif()
-        endif()
-
         string (REPLACE ";" " " TAMM_CXX_FLAGS "${TAMM_CXX_FLAGS}")
         set(${CMSB_CXX_FLAGS} "${${CMSB_CXX_FLAGS}} ${TAMM_CXX_FLAGS}")
         if(USE_DPCPP)
@@ -287,72 +303,29 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
 
         bundle_cmake_strings(CORE_CMAKE_STRINGS ${CMSB_C_FLAGS} ${CMSB_CXX_FLAGS} ${CMSB_Fortran_FLAGS})
         #Cache only for writing to package configuration files.
-        bundle_cmake_strings(CORE_CMAKE_STRINGS CMAKE_CXX_FLAGS_INIT TAMM_CXX_FLAGS MARCH_FLAGS)
-
-        # if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-        #     find_library(stdfs_LIBRARY 
-        #         NAMES c++fs 
-        #         PATHS ${CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES} 
-        #         DOC "LIBC++ FS Library" 
-        #     )
-        # else()
-        if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-            if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9.1")
-                find_library(stdfs_LIBRARY 
-                    NAMES stdc++fs 
-                    PATHS ${CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES} 
-                    DOC "GNU FS Library" 
-                )
-                message(STATUS "STDFS LIB: ${stdfs_LIBRARY}")
-            endif()
-        endif()
-        
-        if(stdfs_LIBRARY)
-            list(APPEND TAMM_EXTRA_LIBS ${stdfs_LIBRARY})
-        endif()
+        bundle_cmake_strings(CORE_CMAKE_STRINGS TAMM_CXX_FLAGS)
 
         if(TAMM_EXTRA_LIBS)
             bundle_cmake_strings(CORE_CMAKE_STRINGS TAMM_EXTRA_LIBS)
             message(STATUS "TAMM_EXTRA_LIBS: ${TAMM_EXTRA_LIBS}")
         endif()
 
-        bundle_cmake_strings(CORE_CMAKE_STRINGS USE_DPCPP SYCL_TBE)
-        bundle_cmake_strings(CORE_CMAKE_STRINGS USE_HIP ROCM_ROOT USE_HIPSYCL)
-        bundle_cmake_strings(CORE_CMAKE_STRINGS USE_CUDA USE_TALSH GPU_ARCH CUDA_MAXREGCOUNT)
 
-        if(USE_CUDA)
-            # if(NOT USE_OPENMP)
-            #     message(FATAL_ERROR "CUDA build requires USE_OPENMP=ON")
-            # endif()
-            if(CMAKE_CUDA_COMPILER_ID STREQUAL "Clang")
-                bundle_cmake_strings(CORE_CMAKE_STRINGS CMAKE_CUDA_COMPILER)
+        foreach(depend ${${__project}_DEPENDENCIES})
+            find_or_build_dependency(${depend})
+            are_we_building(${depend} were_building)
+            if(were_building)
+                list(APPEND DEPENDS_WERE_BUILDING ${depend})
+            else()
+                list(APPEND DEPENDS_WE_FOUND ${depend})
+                package_dependency(${depend} DEPENDENCY_PATHS)
             endif()
-            if(USE_CUTENSOR)
-                bundle_cmake_strings(CORE_CMAKE_STRINGS USE_CUTENSOR)
-                if(CUTENSOR_INSTALL_PREFIX)
-                    bundle_cmake_strings(CORE_CMAKE_STRINGS CUTENSOR_INSTALL_PREFIX)
-                else()
-                    message(FATAL_ERROR "USE_CUTENSOR=ON, but CUTENSOR_INSTALL_PREFIX not provided")
-                endif()
-            endif()
-        endif()
 
-        if(USE_OPENMP)
-            bundle_cmake_strings(CORE_CMAKE_STRINGS USE_OPENMP)
-            if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
-                if("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Darwin" OR USE_DPCPP)
-                    bundle_cmake_strings(CORE_CMAKE_STRINGS OpenMP_C_FLAGS OpenMP_CXX_FLAGS)
-                    bundle_cmake_strings(CORE_CMAKE_STRINGS OpenMP_C_LIB_NAMES OpenMP_CXX_LIB_NAMES OpenMP_omp_LIBRARY OpenMP_libiomp5_LIBRARY)
-                endif()
+            is_valid(${depend}_ROOT __deproot_set)
+            if(__deproot_set)
+                bundle_cmake_args(DEPENDENCY_ROOT_DIRS ${depend}_ROOT)
             endif()
-        endif()  
-
-        if(USE_GA_DEV)
-            bundle_cmake_strings(CORE_CMAKE_STRINGS USE_GA_DEV)
-            if(USE_GA_PROFILER)
-                bundle_cmake_strings(CORE_CMAKE_STRINGS USE_GA_PROFILER)
-            endif()
-        endif()        
+        endforeach()
 
         ExternalProject_Add(${__project}_External
                 SOURCE_DIR ${${__project}_SRC_DIR}
@@ -434,7 +407,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     install(DIRECTORY ${STAGE_INSTALL_DIR}/
             DESTINATION ${CMAKE_INSTALL_PREFIX} USE_SOURCE_PERMISSIONS)
 
-    if(${PROJECT_NAME} STREQUAL "TAMM")
+    if(${PROJECT_NAME} STREQUAL "TAMMCC")
         if(TARGET Libint2::cxx)
             get_target_property(LI_CD Libint2::cxx INTERFACE_COMPILE_DEFINITIONS)
             string(REPLACE "=" " " LI_CD ${LI_CD})
