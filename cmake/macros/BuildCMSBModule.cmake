@@ -407,7 +407,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     install(DIRECTORY ${STAGE_INSTALL_DIR}/
             DESTINATION ${CMAKE_INSTALL_PREFIX} USE_SOURCE_PERMISSIONS)
 
-    if(${PROJECT_NAME} STREQUAL "TAMMCC")
+    if(DEFINED CMSB_BASISSET_DIR)
         if(TARGET Libint2::cxx)
             get_target_property(LI_CD Libint2::cxx INTERFACE_COMPILE_DEFINITIONS)
             string(REPLACE "=" " " LI_CD ${LI_CD})
