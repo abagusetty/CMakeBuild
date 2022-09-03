@@ -6,120 +6,6 @@ include(DependencyMacros)
 
 enable_language(Fortran)
 
-if(USE_GA_AT)
-    # Now find or build GA's dependencies
-    if(USE_SCALAPACK)
-        find_or_build_dependency(ScaLAPACK)
-        package_dependency(ScaLAPACK DEPENDENCY_PATHS)
-    endif()
-    foreach(depend LAPACK BLAS MPI)
-        find_or_build_dependency(${depend})
-        package_dependency(${depend} DEPENDENCY_PATHS)
-    endforeach()
-
-    if("${LINALG_VENDOR}" STREQUAL "IntelMKL")
-        set(BLA_VENDOR_MKL ON)
-        set(BLA_LAPACK_INT       "MKL_INT")
-        set(BLA_LAPACK_COMPLEX8  "MKL_Complex8")
-        set(BLA_LAPACK_COMPLEX16 "MKL_Complex16")        
-    elseif("${LINALG_VENDOR}" STREQUAL "IBMESSL")
-        set(BLA_VENDOR_ESSL ON)
-        set(BLA_LAPACK_INT "int64_t")
-        if(BLAS_INT4)
-            set(BLA_LAPACK_INT "int32_t")
-        endif()
-        set(BLA_LAPACK_COMPLEX8  "std::complex<float>")
-        set(BLA_LAPACK_COMPLEX16 "std::complex<double>")        
-    elseif("${LINALG_VENDOR}" STREQUAL "BLIS")
-        set(USE_BLIS ON)
-        set(BLA_VENDOR_BLIS ON)
-        set(BLA_LAPACK_INT "int64_t")
-        if(BLAS_INT4)
-            set(BLA_LAPACK_INT "int32_t")
-        endif()
-        set(BLA_LAPACK_COMPLEX8  "std::complex<float>")
-        set(BLA_LAPACK_COMPLEX16 "std::complex<double>")
-    endif()
-    
-    ##########################################################
-    # Determine aggregate remote memory copy interface (ARMCI)
-    ##########################################################
-
-    #Possible choices
-    set(GA_RUNTIME_OPTIONS MPI-PR OPENIB MPI-TS)
-    # (BGML DCMF OPENIB GEMINI DMAPP PORTALS GM VIA
-    #  LAPI MPI-SPAWN MPI-PT MPI-MT MPI-PR MPI-TS MPI3 OFI
-    #  OFA SOCKETS MELLANOX)
-
-    # Get index user choose
-    is_valid_and_true(GA_RUNTIME __set)
-    if (NOT __set)
-        message(STATUS "ARMCI network not set, defaulting to MPI-PR")
-        set(GA_RUNTIME "--with-mpi-pr")
-    else()
-        list(FIND GA_RUNTIME_OPTIONS ${GA_RUNTIME} _index)
-        if(${_index} EQUAL -1)
-            message(WARNING "Unrecognized ARMCI Network, defaulting to MPI-PR")
-            set(GA_RUNTIME "--with-mpi-pr")
-        elseif(${_index} EQUAL 4)
-            message(WARNING "We discourage the use of GA_RUNTIME=DMAPP")
-            message(WARNING "Please consider using GA_RUNTIME=MPI-PR instead")
-            set(GA_RUNTIME "--with-dmapp")
-        else()
-            string(TOLOWER ${GA_RUNTIME} _ga_runtime)
-            set(GA_RUNTIME "--with-${_ga_runtime}")
-        endif()
-    endif()
-
-    # message(STATUS ${CMAKE_BINARY_DIR}/stage)
-    # Add the mock CMake-ified GA project
-    ExternalProject_Add(GlobalArrays_External
-            SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/GlobalArrays
-            CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS}
-                    -DSUPER_PROJECT_ROOT=${SUPER_PROJECT_ROOT}
-                    -DCMSB_DEBUG_CMAKE=${CMSB_DEBUG_CMAKE}
-                    -DGA_RUNTIME=${GA_RUNTIME}
-                    -DSTAGE_DIR=${STAGE_DIR}
-                    -DUSE_GA_DEV=${USE_GA_DEV}
-                    -DUSE_GA_PROFILER=${USE_GA_PROFILER}
-            #BUILD_ALWAYS 1
-            INSTALL_COMMAND ""
-            CMAKE_CACHE_ARGS ${CORE_CMAKE_LISTS}
-                            ${CORE_CMAKE_STRINGS}
-                            ${DEPENDENCY_PATHS}
-    )
-
-    set(GA_INSTALL_DIR ${STAGE_DIR}${CMAKE_INSTALL_PREFIX})
-
-    CONFIGURE_FILE( ${CMAKE_CURRENT_LIST_DIR}/GlobalArrays/ga_linalg.h.in
-                    ${CMAKE_CURRENT_BINARY_DIR}/ga_linalg.h )
-
-    set(GENH_LOC ${GA_INSTALL_DIR}/include/ga_linalg.h)
- 
-    add_custom_command(
-        OUTPUT ${GENH_LOC}
-        COMMAND ${CMAKE_COMMAND} -E make_directory  ${GA_INSTALL_DIR}/include
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/ga_linalg.h
-            ${GENH_LOC}
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ga_linalg.h                                      
-    )
-
-    add_custom_target(
-        GenerateLAH ALL
-        DEPENDS ${GENH_LOC}
-    )                     
-
-    # Establish the dependencies
-    if(USE_SCALAPACK)
-        add_dependencies(GlobalArrays_External ScaLAPACK_External LAPACK_External 
-                         BLAS_External MPI_External GenerateLAH)
-    else()
-        add_dependencies(GlobalArrays_External LAPACK_External 
-                         BLAS_External MPI_External GenerateLAH)
-    endif()
-else()
-
-    # Get index user choose
     is_valid_and_true(GA_RUNTIME __set)
     if (NOT __set)
         message(STATUS "ARMCI network not set, defaulting to MPI_PROGRESS_RANK")
@@ -127,10 +13,11 @@ else()
     endif()
 
     set(GA_REPO "https://github.com/GlobalArrays/ga.git")
-    set(GA_GIT_TAG ff9462c4df83ed6124d6482ee596266b68814d7a)
-    if(USE_GA_DEV)
-        set(GA_REPO "https://github.com/ajaypanyala/ga.git")
-        set(GA_GIT_TAG develop)
+    is_valid_and_true(GA_TAG __set)
+    if(__set)
+        set(GA_GIT_TAG ${GA_TAG})
+    else()
+        set(GA_GIT_TAG ff9462c4df83ed6124d6482ee596266b68814d7a)
     endif()
 
     if(GCCROOT)
@@ -234,7 +121,7 @@ else()
     ${USE_CRAYSHASTA} ${ENABLE_CUDA} ${ENABLE_HIP}")
 
     ExternalProject_Add(GlobalArrays_External
-        # # URL https://github.com/GlobalArrays/ga/releases/download/v${PROJECT_VERSION}/ga-${PROJECT_VERSION}.tar.gz
+        # URL https://github.com/GlobalArrays/ga/releases/download/v${PROJECT_VERSION}/ga-${PROJECT_VERSION}.tar.gz
         GIT_REPOSITORY ${GA_REPO}
         GIT_TAG ${GA_GIT_TAG}
         UPDATE_DISCONNECTED 1
@@ -259,6 +146,5 @@ else()
         endif()
     endif()
 
-endif()
 
 
