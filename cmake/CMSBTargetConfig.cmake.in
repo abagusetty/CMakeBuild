@@ -168,6 +168,8 @@ foreach(__depend_i ${__depends})
                             lib64/cmake/${__cur_dep}
                             share/cmake/${__cur_dep}
                             share/${__cur_dep}/cmake
+                            cmake/${__cur_dep}
+                            cmake
                 NO_DEFAULT_PATH
             )
         include(${_dep_ct_${__cur_dep}}/${__depend_cfg})
