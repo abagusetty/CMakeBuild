@@ -29,9 +29,9 @@ enable_language(Fortran)
         set(GA_ENABLE_SYSV OFF)
     endif()    
 
-    if(DEFINED TAMM_EXTRA_LIBS)
-        set(GA_CMSB_EXTRA_LIBS "-DGA_EXTRA_LIBS=${TAMM_EXTRA_LIBS}")
-    endif()
+    # if(DEFINED TAMM_EXTRA_LIBS)
+    #     set(GA_CMSB_EXTRA_LIBS "-DGA_EXTRA_LIBS=${TAMM_EXTRA_LIBS}")
+    # endif()
 
 
     if(BLAS_INT4)
