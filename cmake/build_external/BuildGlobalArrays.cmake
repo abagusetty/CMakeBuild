@@ -17,7 +17,7 @@ enable_language(Fortran)
     if(__set)
         set(GA_GIT_TAG ${GA_TAG})
     else()
-        set(GA_GIT_TAG 355778b55c0a42b03fa73f8e216c656ed69fbe5d)
+        set(GA_GIT_TAG 37d86798c8f0aae2d4d14245dba158c66a45e0ea)
     endif()
 
     if(GCCROOT)
