@@ -217,6 +217,10 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
         bundle_cmake_strings(CORE_CMAKE_STRINGS BUILD_LIBINT)
     endif()
 
+    if(USE_GAUXC)
+        bundle_cmake_strings(CORE_CMAKE_STRINGS USE_GAUXC)
+    endif()    
+
     if(CMAKE_CUDA_COMPILER_ID STREQUAL "Clang")
         bundle_cmake_strings(CORE_CMAKE_STRINGS CMAKE_CUDA_COMPILER)
     endif()
