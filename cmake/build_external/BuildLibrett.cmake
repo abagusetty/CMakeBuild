@@ -1,5 +1,5 @@
 
-set(LIBRETT_GIT_TAG master)
+set(LIBRETT_GIT_TAG bc29bcba71c2ee7e9cf65d51ddb67df8ff9a2ed0)
 if(ENABLE_DEV_MODE)
   set(LIBRETT_GIT_TAG master)
 endif()
