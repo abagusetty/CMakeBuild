@@ -24,6 +24,10 @@ endif()
 set(LIBINT_EXTRA_FLAGS "-Wno-unused-variable")
 set(CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} ${LIBINT_EXTRA_FLAGS}")
 
+if(LIBINT_ERI)
+  set(LIBINT_TAR ${LIBINT_ERI})
+endif()
+
 ExternalProject_Add(LibInt2_External
         URL ${LIBINT_TAR}
         CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS_INIT=${CXX_FLAGS_INIT}

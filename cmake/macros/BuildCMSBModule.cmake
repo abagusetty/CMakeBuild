@@ -214,7 +214,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     endif()
 
     if(BUILD_LIBINT)
-        bundle_cmake_strings(CORE_CMAKE_STRINGS BUILD_LIBINT)
+        bundle_cmake_strings(CORE_CMAKE_STRINGS BUILD_LIBINT LIBINT_ERI)
     endif()
 
     if(USE_GAUXC)
