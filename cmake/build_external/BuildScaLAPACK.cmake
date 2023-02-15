@@ -10,7 +10,7 @@ endforeach()
 
 
 set(ScaLAPACK_URL https://github.com/Reference-ScaLAPACK/scalapack.git)
-set(SL_GIT_TAG 782e739f8eb0e7f4d51ad7dd23fc1d03dc99d240)
+set(SL_GIT_TAG 2072b8602f0a5a84d77a712121f7715c58a2e80d)
 if(ENABLE_DEV_MODE)
   set(SL_GIT_TAG master)
 endif()
@@ -41,9 +41,7 @@ ExternalProject_Add(ScaLAPACK_External
                 UPDATE_DISCONNECTED 1
                 CMAKE_ARGS
                     ${DEPENDENCY_CMAKE_OPTIONS}
-                   -DTEST_SCALAPACK=OFF
                    -DSCALAPACK_BUILD_TESTS=OFF
-                   -DSCALAPACK_BUILD_TESTING=OFF
                    -DUSE_OPTIMIZED_LAPACK_BLAS=ON
                    #-DBUILD_SHARED_LIBS=OFF
                    -DCMAKE_C_FLAGS=${ScaLAPACK_C_FLAGS}

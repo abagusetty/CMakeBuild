@@ -4,7 +4,7 @@ find_or_build_dependency(BLAS)
 package_dependency(BLAS DEPENDENCY_PATHS)
 
 set(LAPACK_URL https://github.com/Reference-LAPACK/lapack.git)
-set(LAPACK_GIT_TAG 1782d90671d8ad3e68c88a257360fe4956f4db3f)
+set(LAPACK_GIT_TAG eb8f5fa6462a483431c258f4d6831aa3d4192771)
 if(ENABLE_DEV_MODE)
   set(LAPACK_GIT_TAG master)
 endif()
