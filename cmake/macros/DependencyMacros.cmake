@@ -199,6 +199,8 @@ function(cmsb_find_dependency __name)
                     set(name_var INTEL_SYCL)
                 elseif(${__NAME} STREQUAL "EIGEN3")
                     set(name_var ${__NAME})
+                    target_include_directories(${_tname} SYSTEM INTERFACE
+                            ${CMAKE_INSTALL_PREFIX}/include/eigen3)                     
                 endif()
 
                 if(${__NAME} STREQUAL "MPI")
