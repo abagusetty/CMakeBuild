@@ -145,6 +145,41 @@ function(cmsb_find_dependency __name)
                   find_package(${_dep_name} CONFIG
                     HINTS ${CMAKE_PREFIX_PATH} NO_DEFAULT_PATH)  
                 endif()
+                if(NOT ${_dep_name}_FOUND)
+                  is_valid(HDF5_ROOT __h5root)
+                  if(${__name} STREQUAL "HDF5" AND __h5root)
+                    # set(HDF5_PREFER_PARALLEL ON)
+                    find_library( _HDF5_LIBRARIES
+                        NAMES hdf5
+                        HINTS ${${__name}_ROOT}
+                        PATHS ${${__name}_ROOT}
+                        PATH_SUFFIXES lib lib64
+                        NO_DEFAULT_PATH
+                    )
+                    find_path( _HDF5_INCLUDE_DIR
+                        NAMES hdf5.h
+                        HINTS ${${__name}_ROOT}
+                        PATHS ${${__name}_ROOT}
+                        PATH_SUFFIXES include
+                        NO_DEFAULT_PATH
+                    )
+                    find_package_handle_standard_args( HDF5
+                        REQUIRED_VARS _HDF5_LIBRARIES _HDF5_INCLUDE_DIR
+                        HANDLE_COMPONENTS
+                    )                         
+                    if(HDF5_FOUND) 
+                        message(STATUS "HDF5 found!")
+                        set(HDF5_INCLUDE_DIR ${_HDF5_INCLUDE_DIR})
+                        if( _HDF5_LIBRARIES AND NOT TARGET hdf5-static )
+                          add_library( hdf5-static INTERFACE IMPORTED )
+                          set_target_properties( hdf5-static PROPERTIES
+                            INTERFACE_INCLUDE_DIRECTORIES "${_HDF5_INCLUDE_DIR}"
+                            INTERFACE_LINK_LIBRARIES      "${_HDF5_LIBRARIES}"
+                          )
+                        endif()                        
+                    endif()
+                  endif()
+                endif()
             else()
                 find_package(${__name})            
             endif()

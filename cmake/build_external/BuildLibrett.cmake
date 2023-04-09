@@ -4,6 +4,10 @@ if(ENABLE_DEV_MODE)
   set(LIBRETT_GIT_TAG master)
 endif()
 
+if(USE_DPCPP)
+  set(LIBRETT_GIT_TAG master)
+endif()
+
 ExternalProject_Add(Librett_External
     GIT_REPOSITORY https://github.com/victor-anisimov/Librett.git
     GIT_TAG ${LIBRETT_GIT_TAG}
