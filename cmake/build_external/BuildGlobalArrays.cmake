@@ -81,6 +81,7 @@ enable_language(Fortran)
 
         if(USE_SCALAPACK)
             set(ScaLAPACK_PREFERENCE_LIST ReferenceScaLAPACK)
+            find_or_build_dependency(LAPACK)	    
             find_or_build_dependency(ScaLAPACK)
             list(APPEND  GA_LINALG_ROOT "-DScaLAPACK_PREFIX=${CMAKE_INSTALL_PREFIX}")
         else()
