@@ -66,7 +66,7 @@
     endif()
 
 ExternalProject_Add(GauXC_External
-    GIT_REPOSITORY https://github.com/ajaypanyala/GauXC.git
+    GIT_REPOSITORY https://github.com/dmejiar/GauXC.git
     GIT_TAG ${GXC_GIT_TAG}
     UPDATE_DISCONNECTED 1
     CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS_INIT="-DOMPI_SKIP_MPICXX" -DGAUXC_ENABLE_TESTS=OFF
