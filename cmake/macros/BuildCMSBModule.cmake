@@ -131,6 +131,10 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     set(CMSB_CXX_FLAGS CMAKE_CXX_FLAGS_${CMSB_CMAKE_BUILD_TYPE})
     set(CMSB_Fortran_FLAGS CMAKE_Fortran_FLAGS_${CMSB_CMAKE_BUILD_TYPE})
 
+    if ("${CMAKE_HOST_SYSTEM_PROCESSOR}" STREQUAL "arm64" AND "${LINALG_VENDOR}" STREQUAL "IntelMKL")
+        message( FATAL_ERROR "IntelMKL is not supported for ARM architectures" )
+    endif()
+
     if(NOT BLAS_INT4 AND USE_SCALAPACK) # AND NOT "${LINALG_VENDOR}" STREQUAL "IntelMKL")
         message( FATAL_ERROR "ScaLAPACK build with ILP64 interface is currently not supported. Please set -DBLAS_INT4=ON" )
     endif()
