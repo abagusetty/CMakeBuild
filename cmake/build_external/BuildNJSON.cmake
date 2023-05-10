@@ -3,6 +3,13 @@ if(ENABLE_DEV_MODE)
   set(NJSON_GIT_TAG develop)
 endif()
 
+if(ENABLE_LOCAL_BUILD)
+ExternalProject_Add(NJSON_External
+    URL ${LOCAL_BUILD_PATH}/json
+    CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} -DJSON_BuildTests=OFF
+        INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${STAGE_DIR}
+    )
+else()
 ExternalProject_Add(NJSON_External
     GIT_REPOSITORY https://github.com/nlohmann/json.git
     GIT_TAG ${NJSON_GIT_TAG}
@@ -10,4 +17,4 @@ ExternalProject_Add(NJSON_External
     CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} -DJSON_BuildTests=OFF
         INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${STAGE_DIR}
     )
-
+endif()

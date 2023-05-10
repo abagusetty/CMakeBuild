@@ -28,6 +28,10 @@ if(LIBINT_ERI)
   set(LIBINT_TAR ${LIBINT_ERI})
 endif()
 
+if(ENABLE_LOCAL_BUILD)
+  set(LIBINT_TAR ${LOCAL_BUILD_PATH}/libint-2.7.2.tgz)
+endif()
+
 ExternalProject_Add(LibInt2_External
         URL ${LIBINT_TAR}
         CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS_INIT=${CXX_FLAGS_INIT}

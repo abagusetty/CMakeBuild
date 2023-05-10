@@ -7,10 +7,16 @@ if(ENABLE_DEV_MODE)
   set(LAM_GIT_TAG main)
 endif()
 
+if(ENABLE_LOCAL_BUILD)
+FetchContent_Declare(linalg-cmake-modules
+  URL ${LOCAL_BUILD_PATH}/linalg-cmake-modules
+)
+else()
 FetchContent_Declare(linalg-cmake-modules
   GIT_REPOSITORY https://github.com/wavefunction91/linalg-cmake-modules.git
   GIT_TAG ${LAM_GIT_TAG}
 )
+endif()
 
 FetchContent_MakeAvailable( linalg-cmake-modules )
 set(CMSB_LAM_PATH ${linalg-cmake-modules_SOURCE_DIR})

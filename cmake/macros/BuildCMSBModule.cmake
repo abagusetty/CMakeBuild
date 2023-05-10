@@ -33,6 +33,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     option_w_default(BUILD_SHARED_LIBS OFF)
     option_w_default(ENABLE_DEV_MODE OFF)
 
+    option_w_default(ENABLE_LOCAL_BUILD OFF)
     option_w_default(USE_UPCXX_DISTARRAY OFF)
     option_w_default(USE_UPCXX ${USE_UPCXX_DISTARRAY})
 
@@ -229,6 +230,10 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
 
     if(CMAKE_CUDA_COMPILER_ID STREQUAL "Clang")
         bundle_cmake_strings(CORE_CMAKE_STRINGS CMAKE_CUDA_COMPILER)
+    endif()
+
+    if(ENABLE_LOCAL_BUILD)
+        bundle_cmake_strings(CORE_CMAKE_STRINGS ENABLE_LOCAL_BUILD LOCAL_BUILD_PATH)
     endif()
 
     if(USE_OPENMP)

@@ -19,6 +19,21 @@ if(BLAS_INT4)
     set(LAPACK_BUILD_INDEX64 "-DBUILD_INDEX64=OFF")
 endif()
 
+if(ENABLE_LOCAL_BUILD)
+ExternalProject_Add(LAPACK_External
+        URL ${LOCAL_BUILD_PATH}/lapack
+        CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS}
+                   -DUSE_OPTIMIZED_BLAS=ON
+                   -DBLAS_LIBRARIES=${BLAS_LIBRARIES}
+                   -DBUILD_TESTING=OFF
+                   -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS_INIT}
+                   -DCMAKE_Fortran_FLAGS=${CMAKE_Fortran_FLAGS_INIT}
+                   -DLAPACKE=OFF -DTEST_FORTRAN_COMPILER=OFF
+                   ${LAPACK_BUILD_INDEX64}
+        INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install #DESTDIR=${STAGE_DIR}
+        CMAKE_CACHE_ARGS ${DEPENDENCY_PATHS} ${CORE_CMAKE_LISTS} ${CORE_CMAKE_STRINGS}
+        )
+else()
 ExternalProject_Add(LAPACK_External
         GIT_REPOSITORY ${LAPACK_URL}
         GIT_TAG ${LAPACK_GIT_TAG}
@@ -34,5 +49,6 @@ ExternalProject_Add(LAPACK_External
         INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install #DESTDIR=${STAGE_DIR}
         CMAKE_CACHE_ARGS ${DEPENDENCY_PATHS} ${CORE_CMAKE_LISTS} ${CORE_CMAKE_STRINGS}
         )
+endif()
 
 add_dependencies(LAPACK_External BLAS_External)

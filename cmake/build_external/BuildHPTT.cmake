@@ -5,6 +5,15 @@ if(ENABLE_DEV_MODE)
     set(HPTT_GIT_TAG master)
 endif()
 
+if(ENABLE_LOCAL_BUILD)
+ExternalProject_Add(HPTT_External
+    URL ${LOCAL_BUILD_PATH}/hptt
+    CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} -DENABLE_OPENMP=${USE_OPENMP} -DMARCH_FLAGS=${MARCH_FLAGS}
+    INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${STAGE_DIR}
+    CMAKE_CACHE_ARGS ${CORE_CMAKE_LISTS}
+                     ${CORE_CMAKE_STRINGS}
+)
+else()
 ExternalProject_Add(HPTT_External
     GIT_REPOSITORY https://github.com/ajaypanyala/hptt.git
     GIT_TAG ${HPTT_GIT_TAG}
@@ -14,4 +23,5 @@ ExternalProject_Add(HPTT_External
     CMAKE_CACHE_ARGS ${CORE_CMAKE_LISTS}
                      ${CORE_CMAKE_STRINGS}
 )
+endif()
 

@@ -39,6 +39,20 @@ endif()
 
 set(BLIS_MISC_OPTIONS --without-memkind)
 
+if(ENABLE_LOCAL_BUILD)
+ExternalProject_Add(BLIS_External
+        URL ${LOCAL_BUILD_PATH}/blis
+        CONFIGURE_COMMAND ./configure --prefix=${CMAKE_INSTALL_PREFIX}
+                                      CXX=${CMAKE_CXX_COMPILER}
+                                      CC=${CMAKE_C_COMPILER}
+                                      CFLAGS=${BLIS_OPT_FLAGS}
+                                      ${BLIS_INT_FLAGS}
+                                      ${BLIS_MISC_OPTIONS}
+                                      ${BLIS_CONFIG_HW}
+        INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${STAGE_DIR}
+        BUILD_IN_SOURCE 1
+)
+else()
 ExternalProject_Add(BLIS_External
         GIT_REPOSITORY https://github.com/flame/blis.git
         GIT_TAG ${BLIS_GIT_TAG}
@@ -53,3 +67,4 @@ ExternalProject_Add(BLIS_External
         INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${STAGE_DIR}
         BUILD_IN_SOURCE 1
 )
+endif()

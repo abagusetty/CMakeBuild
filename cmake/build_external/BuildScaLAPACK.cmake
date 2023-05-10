@@ -35,6 +35,22 @@ if(NOT BLAS_INT4)
     set(ScaLAPACK_F_FLAGS "${_FFD8} ${ScaLAPACK_F_FLAGS}")
 endif()
 
+if(ENABLE_LOCAL_BUILD)
+ExternalProject_Add(ScaLAPACK_External
+                URL ${LOCAL_BUILD_PATH}/scalapack
+                CMAKE_ARGS
+                    ${DEPENDENCY_CMAKE_OPTIONS}
+                   -DSCALAPACK_BUILD_TESTS=OFF
+                   -DUSE_OPTIMIZED_LAPACK_BLAS=ON
+                   #-DBUILD_SHARED_LIBS=OFF
+                   -DCMAKE_C_FLAGS=${ScaLAPACK_C_FLAGS}
+                   -DCMAKE_Fortran_FLAGS=${SCALAPACK_F_FLAGS}
+                #    -DBLAS_LIBRARIES=${BLAS_LIBRARIES}
+                #    -DLAPACK_LIBRARIES=${LAPACK_LIBRARIES}
+        INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install #DESTDIR=${STAGE_DIR}
+        CMAKE_CACHE_ARGS ${DEPENDENCY_PATHS} ${CORE_CMAKE_LISTS} ${CORE_CMAKE_STRINGS}
+        )
+else()
 ExternalProject_Add(ScaLAPACK_External
                 GIT_REPOSITORY ${ScaLAPACK_URL}
                 GIT_TAG ${SL_GIT_TAG}
@@ -51,6 +67,7 @@ ExternalProject_Add(ScaLAPACK_External
         INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install #DESTDIR=${STAGE_DIR}
         CMAKE_CACHE_ARGS ${DEPENDENCY_PATHS} ${CORE_CMAKE_LISTS} ${CORE_CMAKE_STRINGS}
         )
+endif()
 
 add_dependencies(ScaLAPACK_External LAPACK_External BLAS_External)
 
