@@ -7,9 +7,9 @@ if(ENABLE_DEV_MODE)
   set(LAM_GIT_TAG main)
 endif()
 
-if(ENABLE_LOCAL_BUILD)
+if(ENABLE_OFFLINE_BUILD)
 FetchContent_Declare(linalg-cmake-modules
-  URL ${LOCAL_BUILD_PATH}/linalg-cmake-modules
+  URL ${DEPS_LOCAL_PATH}/linalg-cmake-modules
 )
 else()
 FetchContent_Declare(linalg-cmake-modules

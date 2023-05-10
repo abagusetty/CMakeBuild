@@ -39,9 +39,9 @@ endif()
 
 set(BLIS_MISC_OPTIONS --without-memkind)
 
-if(ENABLE_LOCAL_BUILD)
+if(ENABLE_OFFLINE_BUILD)
 ExternalProject_Add(BLAS_External
-        URL ${LOCAL_BUILD_PATH}/blis
+        URL ${DEPS_LOCAL_PATH}/blis
         CONFIGURE_COMMAND ./configure --prefix=${CMAKE_INSTALL_PREFIX}
                                       CXX=${CMAKE_CXX_COMPILER}
                                       CC=${CMAKE_C_COMPILER}

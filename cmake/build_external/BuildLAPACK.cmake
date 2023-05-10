@@ -19,9 +19,9 @@ if(BLAS_INT4)
     set(LAPACK_BUILD_INDEX64 "-DBUILD_INDEX64=OFF")
 endif()
 
-if(ENABLE_LOCAL_BUILD)
+if(ENABLE_OFFLINE_BUILD)
 ExternalProject_Add(LAPACK_External
-        URL ${LOCAL_BUILD_PATH}/lapack
+        URL ${DEPS_LOCAL_PATH}/lapack
         CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS}
                    -DUSE_OPTIMIZED_BLAS=ON
                    -DBLAS_LIBRARIES=${BLAS_LIBRARIES}

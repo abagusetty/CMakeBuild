@@ -28,8 +28,8 @@ if(LIBINT_ERI)
   set(LIBINT_TAR ${LIBINT_ERI})
 endif()
 
-if(ENABLE_LOCAL_BUILD)
-  set(LIBINT_TAR ${LOCAL_BUILD_PATH}/libint-2.7.2.tgz)
+if(ENABLE_OFFLINE_BUILD)
+  set(LIBINT_TAR ${DEPS_LOCAL_PATH}/libint-2.7.2.tgz)
 endif()
 
 ExternalProject_Add(LibInt2_External

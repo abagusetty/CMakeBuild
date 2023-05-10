@@ -35,9 +35,9 @@ if(NOT BLAS_INT4)
     set(ScaLAPACK_F_FLAGS "${_FFD8} ${ScaLAPACK_F_FLAGS}")
 endif()
 
-if(ENABLE_LOCAL_BUILD)
+if(ENABLE_OFFLINE_BUILD)
 ExternalProject_Add(ScaLAPACK_External
-                URL ${LOCAL_BUILD_PATH}/scalapack
+                URL ${DEPS_LOCAL_PATH}/scalapack
                 CMAKE_ARGS
                     ${DEPENDENCY_CMAKE_OPTIONS}
                    -DSCALAPACK_BUILD_TESTS=OFF

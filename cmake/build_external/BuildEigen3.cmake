@@ -3,9 +3,9 @@ if(ENABLE_DEV_MODE)
     set(EIGEN_GIT_TAG master)
 endif()
 
-if(ENABLE_LOCAL_BUILD)
+if(ENABLE_OFFLINE_BUILD)
 ExternalProject_Add(Eigen3_External
-    URL ${LOCAL_BUILD_PATH}/eigen
+    URL ${DEPS_LOCAL_PATH}/eigen
     CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} 
         INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install #DESTDIR=${STAGE_DIR}
     )
