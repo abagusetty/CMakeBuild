@@ -60,17 +60,17 @@
         endif()
     endif()
 
-    set(ASCI_GIT_TAG master)
+    set(MACIS_GIT_TAG master)
     if(ENABLE_DEV_MODE)
-      set(ASCI_GIT_TAG master)
+      set(MACIS_GIT_TAG master)
     endif()
 
-ExternalProject_Add(ASCI_External
+ExternalProject_Add(MACIS_External
     GIT_REPOSITORY https://github.com/wavefunction91/MACIS.git
-    GIT_TAG ${ASCI_GIT_TAG}
+    GIT_TAG ${MACIS_GIT_TAG}
     UPDATE_DISCONNECTED 1
     CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS_INIT="-DOMPI_SKIP_MPICXX" 
-        ${_BLAS_PREFIX} ${_LAPACK_PREFIX} ${_ScaLAPACK_PREFIX} -DASCI_ENABLE_BOOST=OFF -DASCI_ENABLE_OPENMP=${USE_OPENMP}
+        ${_BLAS_PREFIX} ${_LAPACK_PREFIX} ${_ScaLAPACK_PREFIX} -DMACIS_ENABLE_BOOST=OFF -DMACIS_ENABLE_OPENMP=${USE_OPENMP}
         -DBLAS_PREFERENCE_LIST=${BLAS_PREFERENCE_LIST} -DLAPACK_PREFERENCE_LIST=${LAPACK_PREFERENCE_LIST}
         -DScaLAPACK_PREFERENCE_LIST=${ScaLAPACK_PREFERENCE_LIST}
         ${_BLAS_PREFERS_STATIC} ${_LAPACK_PREFERS_STATIC} ${_ScaLAPACK_PREFERS_STATIC}
@@ -84,8 +84,8 @@ ExternalProject_Add(ASCI_External
 
 if(${LINALG_VENDOR} STREQUAL "BLIS" OR ${LINALG_VENDOR} STREQUAL "IBMESSL")
     if(USE_SCALAPACK)
-        add_dependencies(ASCI_External ScaLAPACK_External)
+        add_dependencies(MACIS_External ScaLAPACK_External)
     else()
-        add_dependencies(ASCI_External LAPACK_External)
+        add_dependencies(MACIS_External LAPACK_External)
     endif()
 endif()
