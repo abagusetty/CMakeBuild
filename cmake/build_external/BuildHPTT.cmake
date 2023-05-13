@@ -1,6 +1,6 @@
 
 
-set(HPTT_GIT_TAG aee625b2e51ede30a3b5edf50d159452e7839d95)
+set(HPTT_GIT_TAG eff1bdd79734ddc4993dd4df1d0cdbd40758b9cb)
 if(ENABLE_DEV_MODE)
     set(HPTT_GIT_TAG master)
 endif()
