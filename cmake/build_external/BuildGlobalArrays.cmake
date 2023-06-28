@@ -123,8 +123,9 @@ enable_language(Fortran)
 
     message(STATUS "GlobalArrays CMake Options: ${DEPENDENCY_CMAKE_OPTIONS} \
     -DENABLE_BLAS=ON -DLINALG_VENDOR=${LINALG_VENDOR} ${GA_LINALG_ROOT} \
-    ${GA_DPCPP} -DGA_RUNTIME=${GA_RUNTIME} -DENABLE_SYSV=${GA_ENABLE_SYSV} -DENABLE_PROFILING=${USE_GA_PROFILER} \
-    ${GA_CMSB_EXTRA_LIBS} ${Clang_GCCROOT} ${GA_LINALG_THREAD_LAYER} ${GA_DEV_MODE} \
+    ${GA_DPCPP} -DGA_RUNTIME=${GA_RUNTIME} -DENABLE_SYSV=${GA_ENABLE_SYSV} \
+    -DENABLE_PROFILING=${USE_GA_PROFILER} ${GA_CMSB_EXTRA_LIBS} \
+    ${Clang_GCCROOT} ${GA_LINALG_THREAD_LAYER} ${GA_DEV_MODE} \
     -DLINALG_REQUIRED_COMPONENTS=${LINALG_REQUIRED_COMPONENTS} ${GA_ScaLAPACK} \
     ${USE_CRAYSHASTA} ${ENABLE_CUDA} ${ENABLE_HIP} ${ENABLE_GA_LOCAL_BUILD}")
 
@@ -155,7 +156,7 @@ enable_language(Fortran)
     )
     endif()
 
-    # # Establish the dependencies
+    # Establish the dependencies
     if(${LINALG_VENDOR} STREQUAL "BLIS" OR ${LINALG_VENDOR} STREQUAL "IBMESSL")
         if(${LINALG_VENDOR} STREQUAL "BLIS")
             add_dependencies(GlobalArrays_External BLAS_External LAPACK_External)
