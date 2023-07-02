@@ -159,7 +159,7 @@ function(add_cxx_unit_test __name)
     set_tests_properties(${__name} PROPERTIES LABELS "UnitTest")
 endfunction()
 
-function(cmsb_set_up_cuda_target __name __testcudalib __flags __lflags __install)
+function(cmsb_set_up_gpu_target __name __testgpulib __flags __lflags __install)
     set(__headers_copy ${${__includes}})
     make_full_paths(__headers_copy)
     foreach(__depend ${CMSB_DEPENDENCIES})
@@ -170,7 +170,7 @@ function(cmsb_set_up_cuda_target __name __testcudalib __flags __lflags __install
         list(APPEND CMAKE_INSTALL_RPATH ${_tmp_libs})
     endforeach()
 
-    target_link_libraries(${__name} PRIVATE "${__testcudalib}" "${_tmp_libs}")
+    target_link_libraries(${__name} PRIVATE "${__testgpulib}" "${_tmp_libs}")
     if(TAMM_EXTRA_LIBS)
         target_link_libraries(${__name} PRIVATE "${TAMM_EXTRA_LIBS}")
     endif()
@@ -198,7 +198,7 @@ function(cmsb_set_up_cuda_target __name __testcudalib __flags __lflags __install
     endif()
 endfunction()
 
-function(add_mpi_cuda_unit_test __name __cudasrcs __np __testargs)
+function(add_mpi_gpu_unit_test __name __gpusrcs __np __testargs)
     set(__flags __CMSB_PROJECT_CXX_FLAGS)
     string(TOUPPER ${__name} __NAME)
     string(SUBSTRING ${__NAME} 0 5 _test_prefix)
@@ -214,22 +214,22 @@ function(add_mpi_cuda_unit_test __name __cudasrcs __np __testargs)
     make_full_paths(__file_copy)
     
 
-    set(__testcudalib "cmsb_cudalib_${__name}")
+    set(__testgpulib "cmsb_gpulib_${__name}")
 
-    add_library(${__testcudalib} ${__cudasrcs})
-    target_compile_options( ${__testcudalib}
+    add_library(${__testgpulib} ${__gpusrcs})
+    target_compile_options( ${__testgpulib}
     PRIVATE
       $<$<COMPILE_LANGUAGE:CUDA>: -Xptxas -v > 
     )
-    cmsb_set_up_target(${__testcudalib} "" "" ${_dest_install_folder})
+    cmsb_set_up_target(${__testgpulib} "" "" ${_dest_install_folder})
 
-    # set_property(TARGET ${__testcudalib} PROPERTY CUDA_SEPARABLE_COMPILATION ON)
+    # set_property(TARGET ${__testgpulib} PROPERTY CUDA_SEPARABLE_COMPILATION ON)
 
     add_executable(${__name} ${__file_copy})
     #set_property(TARGET ${__name} PROPERTY LINKER_LANGUAGE CXX)
     #set_source_files_properties(${sources} PROPERTIES LANGUAGE "CUDA")
 
-    cmsb_set_up_cuda_target(${__name} ${__testcudalib} ${__flags} "" ${_dest_install_folder})
+    cmsb_set_up_gpu_target(${__name} ${__testgpulib} ${__flags} "" ${_dest_install_folder})
     install(TARGETS ${__name} DESTINATION ${_dest_install_folder})
     set(__cmsb_job_cmd ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${__np})
     if(JOB_LAUNCH_CMD)
