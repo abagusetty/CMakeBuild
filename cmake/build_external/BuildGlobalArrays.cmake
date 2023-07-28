@@ -114,11 +114,11 @@ enable_language(Fortran)
     if(USE_HIP)
       set(ENABLE_HIP "-DENABLE_HIP=ON")
     elseif(USE_CUDA)
-      set(ENABLE_CUDA "-DENABLE_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=${GPU_ARCH}")
+      set(ENABLE_CUDA -DENABLE_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=${GPU_ARCH})
     endif()
 
     if(ENABLE_OFFLINE_BUILD)
-      set(ENABLE_GA_LOCAL_BUILD "-DENABLE_OFFLINE_BUILD=ON -DDEPS_LOCAL_PATH=${DEPS_LOCAL_PATH}")
+      set(ENABLE_GA_LOCAL_BUILD -DENABLE_OFFLINE_BUILD=ON -DDEPS_LOCAL_PATH=${DEPS_LOCAL_PATH})
     endif()
 
     message(STATUS "GlobalArrays CMake Options: ${DEPENDENCY_CMAKE_OPTIONS} \
@@ -155,7 +155,7 @@ enable_language(Fortran)
                         ${CORE_CMAKE_STRINGS}
     )
     endif()
-
+    
     # Establish the dependencies
     if(${LINALG_VENDOR} STREQUAL "BLIS" OR ${LINALG_VENDOR} STREQUAL "IBMESSL")
         if(${LINALG_VENDOR} STREQUAL "BLIS")
