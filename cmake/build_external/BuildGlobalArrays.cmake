@@ -112,7 +112,7 @@ enable_language(Fortran)
     endif()
 
     if(USE_HIP)
-      set(ENABLE_HIP "-DENABLE_HIP=ON")
+      set(ENABLE_HIP -DENABLE_HIP=ON -DCMAKE_HIP_ARCHITECTURES=${GPU_ARCH})
     elseif(USE_CUDA)
       set(ENABLE_CUDA -DENABLE_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=${GPU_ARCH})
     endif()
