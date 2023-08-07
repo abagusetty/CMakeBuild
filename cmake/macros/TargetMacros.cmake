@@ -179,10 +179,6 @@ function(cmsb_set_up_gpu_target __name __testgpulib __flags __lflags __install)
     set_property(TARGET ${__name} PROPERTY CXX_STANDARD ${CMAKE_CXX_STANDARD})
     set_property(TARGET ${__name} PROPERTY LINK_FLAGS "${${__lflags}}") 
     # set_property(TARGET ${__name} PROPERTY CUDA_SEPARABLE_COMPILATION ON)
-    target_compile_options( ${__name}
-    PRIVATE
-      $<$<COMPILE_LANGUAGE:CUDA>: -Xptxas -v > 
-    )
     if(USE_HIP)
       list (APPEND CMAKE_PREFIX_PATH ${ROCM_ROOT} ${ROCM_ROOT}/hip ${ROCM_ROOT}/hipblas)
       set(CMAKE_HIP_ARCHITECTURES ${GPU_ARCH} CACHE STRING "")
@@ -192,6 +188,10 @@ function(cmsb_set_up_gpu_target __name __testgpulib __flags __lflags __install)
       set(_GPU_BLAS roc::rocblas hip::device)
       target_link_libraries(${__name} PUBLIC ${_GPU_BLAS})
     elseif(USE_CUDA)
+      target_compile_options( ${__name}
+      PRIVATE
+        $<$<COMPILE_LANGUAGE:CUDA>: -Xptxas -v > 
+      )
       find_package(CUDAToolkit REQUIRED COMPONENTS cublas)
       target_link_libraries(${__name} PUBLIC CUDA::cudart CUDA::cublas)
       target_include_directories(${__name} PUBLIC ${CUDAToolkit_INCLUDE_DIRS})
@@ -217,10 +217,12 @@ function(add_mpi_gpu_unit_test __name __gpusrcs __np __testargs)
     set(__testgpulib "cmsb_gpulib_${__name}")
 
     add_library(${__testgpulib} ${__gpusrcs})
+    if(USE_CUDA)
     target_compile_options( ${__testgpulib}
     PRIVATE
       $<$<COMPILE_LANGUAGE:CUDA>: -Xptxas -v > 
     )
+    endif()
     cmsb_set_up_target(${__testgpulib} "" "" ${_dest_install_folder})
 
     # set_property(TARGET ${__testgpulib} PROPERTY CUDA_SEPARABLE_COMPILATION ON)
