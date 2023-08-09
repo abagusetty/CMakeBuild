@@ -52,6 +52,12 @@ git checkout b2306145e1789368e6f261680e8dc007e91cc986
 
 cd $cdir
 
+git clone git clone https://github.com/gabime/spdlog
+cd spdlog
+# git checkout v1.x
+
+cd $cdir
+
 git clone https://github.com/Reference-LAPACK/lapack.git
 cd lapack
 git checkout eb8f5fa6462a483431c258f4d6831aa3d4192771
