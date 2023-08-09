@@ -8,6 +8,11 @@ if(USE_DPCPP)
   set(LIBRETT_GIT_TAG master)
 endif()
 
+is_valid_and_true(LIBRETT_TAG __lt_set)
+if(__lt_set)
+  set(LIBRETT_GIT_TAG ${LIBRETT_TAG})
+endif()
+
 if(ENABLE_OFFLINE_BUILD)
 ExternalProject_Add(Librett_External
     URL ${DEPS_LOCAL_PATH}/Librett
