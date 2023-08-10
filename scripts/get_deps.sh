@@ -84,4 +84,8 @@ cd scalapackpp
 git checkout 6397f52cf11c0dfd82a79698ee198a2fce515d81
 cd $cdir
 
+git clone https://github.com/robashaw/libecpint.git
+cd libecpint
+git checkout 8e788d4ea9b74e464dd834441369e3e8488256d9
 
+cd $cdir
