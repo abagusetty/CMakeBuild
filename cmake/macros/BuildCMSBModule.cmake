@@ -177,7 +177,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     if(USE_CUDA)
         bundle_cmake_args(CMSB_CORE_OPTIONS CMAKE_CUDA_ARCHITECTURES)
     elseif(USE_HIP)
-        bundle_cmake_args(CMSB_CORE_OPTIONS CMAKE_HIP_ARCHITECTURES)
+        bundle_cmake_args(CMSB_CORE_OPTIONS CMAKE_HIP_ARCHITECTURES CMAKE_HIP_COMPILER)
     endif()
     
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
