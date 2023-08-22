@@ -29,6 +29,7 @@ if(USE_CUDA)
     endif()
 endif()
 if(USE_HIP)
+  set(GPU_TARGETS "${GPU_ARCH}" CACHE STRING "GPU targets to compile for")
   enable_language(HIP)
 endif()
 
