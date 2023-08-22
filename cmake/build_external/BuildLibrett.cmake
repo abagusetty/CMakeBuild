@@ -1,10 +1,6 @@
 
-set(LIBRETT_GIT_TAG bc29bcba71c2ee7e9cf65d51ddb67df8ff9a2ed0)
+set(LIBRETT_GIT_TAG master)
 if(ENABLE_DEV_MODE)
-  set(LIBRETT_GIT_TAG master)
-endif()
-
-if(USE_DPCPP)
   set(LIBRETT_GIT_TAG master)
 endif()
 
