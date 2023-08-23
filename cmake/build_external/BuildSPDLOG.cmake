@@ -1,5 +1,5 @@
 
-set(SPDLOG_GIT_TAG v1.x)
+set(SPDLOG_GIT_TAG cedfeeb95f3af11df7d3b1e7e0d3b86b334dc23b)
 if(ENABLE_DEV_MODE)
   set(SPDLOG_GIT_TAG v1.x)
 endif()
@@ -10,7 +10,6 @@ ExternalProject_Add(SPDLOG_External
     CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} -DSPDLOG_INSTALL=ON
     INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${STAGE_DIR}
     CMAKE_CACHE_ARGS ${CORE_CMAKE_LISTS}
-                     ${CORE_CMAKE_STRINGS}
 )
 else()
 ExternalProject_Add(SPDLOG_External
@@ -20,6 +19,5 @@ ExternalProject_Add(SPDLOG_External
     CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} -DSPDLOG_INSTALL=ON
     INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${STAGE_DIR}
     CMAKE_CACHE_ARGS ${CORE_CMAKE_LISTS}
-                     ${CORE_CMAKE_STRINGS}
 )
 endif()
