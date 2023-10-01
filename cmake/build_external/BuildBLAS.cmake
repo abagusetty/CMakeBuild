@@ -22,7 +22,7 @@ if(CMAKE_POSITION_INDEPENDENT_CODE)
 endif()
 
 set(BLIS_TAR https://github.com/flame/blis/archive/refs/tags/0.9.0.tar.gz)
-set(BLIS_GIT_TAG 60f36347c16e6336215cd52b4e5f3c0f96e7c253)
+set(BLIS_GIT_TAG 6f412204004666abac266409a203cb635efbabf3)
 
 set(BLIS_OPT_FLAGS "${BLIS_FLAGS}")
 
