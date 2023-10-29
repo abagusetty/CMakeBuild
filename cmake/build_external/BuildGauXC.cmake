@@ -65,6 +65,11 @@ if(ENABLE_DEV_MODE)
     set(GXC_GIT_TAG master)
 endif()
 
+is_valid_and_true(GAUXC_TAG __lt_set)
+if(__lt_set)
+  set(GXC_GIT_TAG ${GAUXC_TAG})
+endif()
+
 message(STATUS "GauXC OPTIONS: -DGAUXC_ENABLE_TESTS=OFF \
 -DGAUXC_ENABLE_CUDA=${USE_CUDA} -DGAUXC_ENABLE_HOST=ON \
 -DCMAKE_CUDA_ARCHITECTURES=${GPU_ARCH} \
