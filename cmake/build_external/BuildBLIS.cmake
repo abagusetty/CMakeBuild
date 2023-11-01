@@ -24,6 +24,11 @@ endif()
 set(BLIS_TAR https://github.com/flame/blis/archive/refs/tags/0.9.0.tar.gz)
 set(BLIS_GIT_TAG 7a87e57b69d697a9b06231a5c0423c00fa375dc1)
 
+if(USE_SCALAPACK)
+  #The next commit breaks scalapack builds
+  set(BLIS_GIT_TAG 6f412204004666abac266409a203cb635efbabf3)
+endif()
+
 is_valid_and_true(BLIS_TAG __lt_set)
 if(__lt_set)
   set(BLIS_GIT_TAG ${BLIS_TAG})
