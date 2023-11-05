@@ -127,6 +127,9 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
         set(CMAKE_Fortran_FLAGS_RELWITHDEBINFO "${CMAKE_Fortran_FLAGS_RELWITHDEBINFO} -Wall ${CMSB_EXTRA_FLAGS}")
     endif()
 
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        set(CMSB_MISIN_FLAG "-Wno-misleading-indentation")
+    endif()
 
     string(TOUPPER ${CMAKE_BUILD_TYPE} CMSB_CMAKE_BUILD_TYPE)
     set(CMSB_C_FLAGS CMAKE_C_FLAGS_${CMSB_CMAKE_BUILD_TYPE})
@@ -268,7 +271,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
         if(TAMM_CXX_FLAGS)
             string (REPLACE " " ";" TAMM_CXX_FLAGS "${TAMM_CXX_FLAGS}")
         endif()
-        list(APPEND TAMM_CXX_FLAGS ${CMSB_GCC_TOOLCHAIN_FLAG} -DOMPI_SKIP_MPICXX)
+        list(APPEND TAMM_CXX_FLAGS ${CMSB_GCC_TOOLCHAIN_FLAG} ${CMSB_MISIN_FLAG} -DOMPI_SKIP_MPICXX)
 
         if (USE_SCALAPACK) 
           list(APPEND TAMM_CXX_FLAGS -DUSE_SCALAPACK)
