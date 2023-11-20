@@ -3,6 +3,11 @@ if(ENABLE_DEV_MODE)
     set(EIGEN_GIT_TAG master)
 endif()
 
+is_valid_and_true(EIGEN_TAG __et_set)
+if(__et_set)
+  set(EIGEN_GIT_TAG ${EIGEN_TAG})
+endif()
+
 if(ENABLE_OFFLINE_BUILD)
 ExternalProject_Add(Eigen3_External
     URL ${DEPS_LOCAL_PATH}/eigen
