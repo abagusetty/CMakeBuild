@@ -21,6 +21,13 @@ set(__cmsb_libname @CMSB_LIBRARY_NAME@)
 string(TOUPPER ${__cmsb_libname} __CMSB_LIBNAME)
 
 set(CMAKE_FIND_PACKAGE_NAME ${__CMSB_LIBNAME})
+#set the suffix serach for static link libraries
+if (NOT DEFINED CMAKE_STATIC_LIBRARY_SUFFIX)
+  if (WIN32)
+  else()
+    set(CMAKE_STATIC_LIBRARY_SUFFIX ".a")
+  endif()
+endif()
 
 #Find the actual library (if there is one)
 if(@HAS_LIBRARY@)
