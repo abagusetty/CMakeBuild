@@ -20,6 +20,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
     option_w_default(ENABLE_COVERAGE OFF)
     option_w_default(CMAKE_CXX_EXTENSIONS OFF)
     option_w_default(CMAKE_BUILD_TYPE Release)
+    option_w_default(USE_HDF5 ON)
     option_w_default(USE_OPENMP OFF)
     option_w_default(USE_DPCPP OFF)
     option_w_default(ENABLE_DPCPP ${USE_DPCPP})
@@ -195,7 +196,7 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
 
     bundle_cmake_args(DEPENDENCY_CMAKE_OPTIONS ${CMSB_CORE_OPTIONS})
 
-    bundle_cmake_args(DEPENDENCY_CMAKE_OPTIONS BLAS_INT4 LINALG_VENDOR LINALG_PREFIX ENABLE_COVERAGE USE_SCALAPACK)
+    bundle_cmake_args(DEPENDENCY_CMAKE_OPTIONS BLAS_INT4 LINALG_VENDOR LINALG_PREFIX ENABLE_COVERAGE USE_SCALAPACK USE_HDF5)
     bundle_cmake_args(DEPENDENCY_CMAKE_OPTIONS BLIS_CONFIG GCCROOT HDF5_ROOT LibInt2_ROOT)
 
     bundle_cmake_strings(CORE_CMAKE_STRINGS ENABLE_DEV_MODE GPU_ARCH MARCH_FLAGS USE_TAMM_DEV CMSB_TAG)
@@ -274,6 +275,10 @@ function(build_cmsb_module SUPER_PROJECT_ROOT)
 
         if (USE_SCALAPACK) 
           list(APPEND TAMM_CXX_FLAGS -DUSE_SCALAPACK)
+        endif()
+
+        if (USE_HDF5)
+          list(APPEND TAMM_CXX_FLAGS -DUSE_HDF5)
         endif()
 
         if(TAMM_EXTRA_LIBS)
