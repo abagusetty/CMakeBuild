@@ -16,6 +16,8 @@ git checkout 60f36347c16e6336215cd52b4e5f3c0f96e7c253
 
 cd $cdir
 
+wget https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.26/OpenBLAS-0.3.26.tar.gz
+
 wget https://github.com/doctest/doctest/archive/refs/tags/v2.4.9.tar.gz
 
 git clone https://gitlab.com/libeigen/eigen.git

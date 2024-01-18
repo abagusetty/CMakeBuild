@@ -5,6 +5,8 @@
 
 enable_language(C Fortran)
 
+if("${LINALG_VENDOR}" STREQUAL "BLIS")
+
 is_valid_and_true(BLIS_CONFIG __set)
 if (NOT __set)
     message(STATUS "BLIS_CONFIG not set, will auto-detect")
@@ -77,4 +79,39 @@ ExternalProject_Add(BLAS_External
         INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install #DESTDIR=${STAGE_DIR} 
         BUILD_IN_SOURCE 1
 )
+endif()
+
+
+elseif("${LINALG_VENDOR}" STREQUAL "OpenBLAS")
+
+set(OB_INT8 OFF)
+
+if(NOT BLAS_INT4)
+  set(OB_INT8 ON)
+endif()
+
+if(ENABLE_OFFLINE_BUILD)
+ExternalProject_Add(BLAS_External
+        URL ${DEPS_LOCAL_PATH}/OpenBLAS-0.3.26.tar.gz
+        CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS}
+                                      -DBUILD_WITHOUT_LAPACK=ON
+                                      -DBUILD_TESTING=OFF
+                                      -DBUILD_WITHOUT_CBLAS=ON
+                                      -DINTERFACE64=${OB_INT8}
+        INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install #DESTDIR=${STAGE_DIR}
+        BUILD_IN_SOURCE 1
+)
+else()
+ExternalProject_Add(BLAS_External
+        URL https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.26/OpenBLAS-0.3.26.tar.gz
+        CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS}
+                                      -DBUILD_WITHOUT_LAPACK=ON
+                                      -DBUILD_TESTING=OFF
+                                      -DBUILD_WITHOUT_CBLAS=ON
+                                      -DINTERFACE64=${OB_INT8}
+        INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install #DESTDIR=${STAGE_DIR}
+        BUILD_IN_SOURCE 1
+)
+endif()
+
 endif()

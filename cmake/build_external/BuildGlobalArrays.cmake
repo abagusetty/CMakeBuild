@@ -58,7 +58,7 @@ enable_language(Fortran)
 
     set(GA_LINALG_ROOT   "-DLINALG_PREFIX=${LINALG_PREFIX}")
 
-    if(${LINALG_VENDOR} STREQUAL "BLIS" OR ${LINALG_VENDOR} STREQUAL "IBMESSL")
+    if(${LINALG_VENDOR} STREQUAL "BLIS" OR ${LINALG_VENDOR} STREQUAL "OpenBLAS" OR ${LINALG_VENDOR} STREQUAL "IBMESSL")
         set(BLAS_PREFERENCE_LIST ${LINALG_VENDOR})
         set(LAPACK_PREFERENCE_LIST ReferenceLAPACK)
 
@@ -75,7 +75,7 @@ enable_language(Fortran)
         set(LAPACK_REQUIRED_COMPONENTS     ${LINALG_REQUIRED_COMPONENTS})
         set(ScaLAPACK_REQUIRED_COMPONENTS  ${LINALG_REQUIRED_COMPONENTS})
 
-        if(${LINALG_VENDOR} STREQUAL "BLIS")
+        if(${LINALG_VENDOR} STREQUAL "BLIS" OR ${LINALG_VENDOR} STREQUAL "OpenBLAS")
             set(GA_LINALG_ROOT   "-DLINALG_PREFIX=${CMAKE_INSTALL_PREFIX}")
         endif()
 
@@ -161,8 +161,8 @@ enable_language(Fortran)
     endif()
     
     # Establish the dependencies
-    if(${LINALG_VENDOR} STREQUAL "BLIS" OR ${LINALG_VENDOR} STREQUAL "IBMESSL")
-        if(${LINALG_VENDOR} STREQUAL "BLIS")
+    if(${LINALG_VENDOR} STREQUAL "BLIS" OR ${LINALG_VENDOR} STREQUAL "IBMESSL" OR ${LINALG_VENDOR} STREQUAL "OpenBLAS")
+        if(${LINALG_VENDOR} STREQUAL "BLIS" OR ${LINALG_VENDOR} STREQUAL "OpenBLAS")
             add_dependencies(GlobalArrays_External BLAS_External LAPACK_External)
         elseif(${LINALG_VENDOR} STREQUAL "IBMESSL")
             add_dependencies(GlobalArrays_External LAPACK_External)
