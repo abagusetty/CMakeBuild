@@ -92,7 +92,7 @@ endif()
 
 if(ENABLE_OFFLINE_BUILD)
 ExternalProject_Add(BLAS_External
-        URL ${DEPS_LOCAL_PATH}/OpenBLAS-0.3.26.tar.gz
+        URL ${DEPS_LOCAL_PATH}/OpenBLAS-0.3.27.tar.gz
         CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS}
                                       -DBUILD_WITHOUT_LAPACK=ON
                                       -DBUILD_TESTING=OFF
@@ -103,7 +103,7 @@ ExternalProject_Add(BLAS_External
 )
 else()
 ExternalProject_Add(BLAS_External
-        URL https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.26/OpenBLAS-0.3.26.tar.gz
+        URL https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.27/OpenBLAS-0.3.27.tar.gz
         CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS}
                                       -DBUILD_WITHOUT_LAPACK=ON
                                       -DBUILD_TESTING=OFF
