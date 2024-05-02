@@ -99,7 +99,7 @@ enable_language(Fortran)
       set(GA_ScaLAPACK "-DENABLE_SCALAPACK=ON")
     endif()
 
-    if(USE_DPCPP)
+    if(${CMSB_PROJECTS}_HAS_DPCPP)
       set(GA_DPCPP "-DENABLE_DPCPP=ON")
     endif()
 
@@ -115,9 +115,9 @@ enable_language(Fortran)
       set(ENABLE_COVERAGE "-DENABLE_COVERAGE=ON")
     endif()
 
-    if(USE_HIP)
+    if(${CMSB_PROJECTS}_HAS_HIP)
       set(ENABLE_HIP -DENABLE_HIP=ON -DCMAKE_HIP_ARCHITECTURES=${GPU_ARCH})
-    elseif(USE_CUDA)
+    elseif(${CMSB_PROJECTS}_HAS_CUDA)
       set(ENABLE_CUDA -DENABLE_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=${GPU_ARCH})
     endif()
 

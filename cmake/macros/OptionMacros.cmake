@@ -78,3 +78,17 @@ function(bundle_cmake_list __out_var)
     endforeach()
     set(${__out_var} ${${__out_var}} PARENT_SCOPE)
 endfunction()
+
+function(cmsb_set_has_vars PROJECT_ENABLE_XYZ PROJECT_HAS_XYZ CMSB_HAS_XYZ)
+    set(${PROJECT_HAS_XYZ} FALSE CACHE BOOL "" FORCE)
+    mark_as_advanced(FORCE ${PROJECT_HAS_XYZ})
+    
+    if(${PROJECT_ENABLE_XYZ})
+        set(${PROJECT_HAS_XYZ} TRUE CACHE BOOL "" FORCE)
+    endif()
+
+    get_property(${CMSB_HAS_XYZ} CACHE ${PROJECT_HAS_XYZ} PROPERTY VALUE)
+
+    set(${CMSB_HAS_XYZ} ${${CMSB_HAS_XYZ}} PARENT_SCOPE)
+    set(${PROJECT_HAS_XYZ} ${${PROJECT_HAS_XYZ}} PARENT_SCOPE)
+endfunction()
