@@ -113,6 +113,8 @@ enable_language(Fortran)
 
     if(ENABLE_COVERAGE)
       set(ENABLE_COVERAGE "-DENABLE_COVERAGE=ON")
+    else()
+      set(ENABLE_COVERAGE)
     endif()
 
     if(${CMSB_PROJECTS}_HAS_HIP)

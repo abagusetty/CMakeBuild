@@ -11,7 +11,7 @@ include(OptionMacros)
 
 enable_language(C)
 
-set(DEP_ABUILD "GauXC" "Eigen3" "LibInt2" "HPTT" "HDF5" "numactl" "GlobalArrays" "TAMM") # "BLIS" "AntlrCppRuntime"
+set(DEP_ABUILD "GauXC" "Eigen3" "LibInt2" "HPTT" "HDF5" "numactl" "ELPA" "GlobalArrays" "TAMM") # "BLIS" "AntlrCppRuntime"
 set(DEP_ABUILD_MISC "MACIS" "MSGSL" "NJSON" "DOCTEST" "SPDLOG" "EcpInt" "Librett")
 if("${LINALG_VENDOR}" STREQUAL "BLIS" OR "${LINALG_VENDOR}" STREQUAL "OpenBLAS")
     list(APPEND DEP_ABUILD "BLAS" "LAPACK")
@@ -155,7 +155,9 @@ function(cmsb_find_dependency __name)
                 endif()
                 if(NOT ${_dep_name}_FOUND)
                   is_valid(HDF5_ROOT __h5root)
-                  if(${__name} STREQUAL "HDF5" AND __h5root)
+                  if(${__name} STREQUAL "ELPA") 
+                    find_package(ELPA)
+                  elseif(${__name} STREQUAL "HDF5" AND __h5root)
                     # set(HDF5_PREFER_PARALLEL ON)
                     find_library( _HDF5_LIBRARIES
                         NAMES hdf5
@@ -207,7 +209,6 @@ function(cmsb_find_dependency __name)
                         HANDLE_COMPONENTS
                     )
                     if(numactl_FOUND)
-                        message(STATUS "numactl found!")
                         set(numactl_INCLUDE_DIR ${_numactl_INCLUDE_DIR})
                         if( _numactl_LIBRARIES AND NOT TARGET numactl-cmsb )
                             add_library( numactl-cmsb INTERFACE IMPORTED )
@@ -269,6 +270,11 @@ function(cmsb_find_dependency __name)
                     set(${name_var}_LIBRARIES numactl-cmsb)
                     target_include_directories(${_tname} SYSTEM INTERFACE
                         ${${name_var}_INCLUDE_DIR})
+
+                elseif(${__NAME} STREQUAL "ELPA")
+                    set(${name_var}_LIBRARIES elpa_cmsb)
+                    target_include_directories(${_tname} SYSTEM INTERFACE
+                        ${${name_var}_INCLUDE_DIRS})                        
 
                 elseif(${__name} IN_LIST DEP_ABUILD_MISC OR 
                        ${__NAME} IN_LIST DEP_ABUILD_MISC)

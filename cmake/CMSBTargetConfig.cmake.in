@@ -17,6 +17,7 @@ foreach(__iter RANGE 2)
 endforeach()
 
 #Name of the library
+set(CMSB_PROJECTS @CMSB_PROJECTS@)
 set(__cmsb_libname @CMSB_LIBRARY_NAME@)
 string(TOUPPER ${__cmsb_libname} __CMSB_LIBNAME)
 
@@ -75,6 +76,7 @@ set(USE_LIBNUMA  @USE_LIBNUMA@)
 set(${__CMSB_LIBNAME}_HAS_HIP    @CMSB_HAS_HIP@)
 set(${__CMSB_LIBNAME}_HAS_CUDA   @CMSB_HAS_CUDA@)
 set(${__CMSB_LIBNAME}_HAS_DPCPP  @CMSB_HAS_DPCPP@)
+set(${__CMSB_LIBNAME}_HAS_ELPA   @CMSB_HAS_ELPA@)
 set(USE_UPCXX   @USE_UPCXX@)
 
 if(${__CMSB_LIBNAME} STREQUAL TAMM)
@@ -188,6 +190,9 @@ foreach(__depend_i ${__depends})
         set(BLIS_ROOT ${__tip} ${__tip_stage})
         find_package(BLIS)
         list(APPEND ${__CMSB_LIBNAME}_LIBRARIES ${BLIS_LIBRARIES})
+    elseif(${__depend_i} STREQUAL "ELPA")
+      find_package(ELPA)
+      list(APPEND ${__CMSB_LIBNAME}_LIBRARIES elpa_cmsb)
     else()
         find_path(_dep_ct_${__cur_dep} ${__depend_cfg}
                 HINTS ${__tip} ${__tip_stage} ${_dep_pp} ${CMAKE_PREFIX_PATH}
@@ -201,7 +206,7 @@ foreach(__depend_i ${__depends})
             )
         if(EXISTS ${_dep_ct_${__cur_dep}}/${__depend_cfg})
           include(${_dep_ct_${__cur_dep}}/${__depend_cfg})
-        elseif(${__depend_i} STREQUAL "HDF5")
+        elseif(${__depend_i} STREQUAL "HDF5")        
           find_library( _HDF5_LIBRARIES
               NAMES hdf5
               HINTS ${HDF5_ROOT}
@@ -251,7 +256,6 @@ foreach(__depend_i ${__depends})
               HANDLE_COMPONENTS
           )
           if(numactl_FOUND)
-              message(STATUS "numactl found!")
               set(NUMACTL_INCLUDE_DIR ${_numactl_INCLUDE_DIR})
               if( _numactl_LIBRARIES AND NOT TARGET numactl-cmsb )
                   add_library( numactl-cmsb INTERFACE IMPORTED )

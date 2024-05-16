@@ -24,18 +24,17 @@ endif()
 set(LIBINT_EXTRA_FLAGS "-Wno-unused-variable")
 set(CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} ${LIBINT_EXTRA_FLAGS}")
 
-set (LI_SRC_SDIR libint-${LIBINT_VERSION})
-if("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Darwin")
-  set(LI_SRC_SDIR ".")
-endif()
-
 if(LIBINT_ERI)
   set(LIBINT_TAR ${LIBINT_ERI})
-  set(LI_SRC_SDIR ".")
 endif()
 
 if(ENABLE_OFFLINE_BUILD)
   set(LIBINT_TAR ${DEPS_LOCAL_PATH}/libint-${LIBINT_VERSION}.tgz)
+endif()
+
+set (LI_SRC_SDIR libint-${LIBINT_VERSION})
+if("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Darwin")
+  set(LI_SRC_SDIR ".")
 endif()
 
 ExternalProject_Add(LibInt2_External
