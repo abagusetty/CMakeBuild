@@ -1,8 +1,4 @@
-
-set(SPDLOG_GIT_TAG cedfeeb95f3af11df7d3b1e7e0d3b86b334dc23b)
-if(ENABLE_DEV_MODE)
-  set(SPDLOG_GIT_TAG v1.x)
-endif()
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
 
 if(ENABLE_OFFLINE_BUILD)
 ExternalProject_Add(SPDLOG_External

@@ -1,14 +1,12 @@
 
 enable_language(C Fortran)
+
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
+
 find_or_build_dependency(BLAS)
 package_dependency(BLAS DEPENDENCY_PATHS)
 
 set(LAPACK_URL https://github.com/Reference-LAPACK/lapack.git)
-set(LAPACK_GIT_TAG eb8f5fa6462a483431c258f4d6831aa3d4192771)
-if(ENABLE_DEV_MODE)
-  set(LAPACK_GIT_TAG master)
-endif()
-
 
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "Cray")
     message(STATUS "Detected Cray Fortran compiler!")

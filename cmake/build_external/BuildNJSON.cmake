@@ -1,7 +1,4 @@
-set(NJSON_GIT_TAG b2306145e1789368e6f261680e8dc007e91cc986)
-if(ENABLE_DEV_MODE)
-  set(NJSON_GIT_TAG develop)
-endif()
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
 
 if(ENABLE_OFFLINE_BUILD)
 ExternalProject_Add(NJSON_External
@@ -11,9 +8,11 @@ ExternalProject_Add(NJSON_External
     )
 else()
 ExternalProject_Add(NJSON_External
-    GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG ${NJSON_GIT_TAG}
-    UPDATE_DISCONNECTED 1    
+    # GIT_REPOSITORY https://github.com/nlohmann/json.git
+    # GIT_TAG v${NJSON_GIT_TAG}
+    # GIT_SHALLOW 1
+    # UPDATE_DISCONNECTED 1    
+    URL https://github.com/nlohmann/json/archive/refs/tags/v${CMSB_NJSON_VERSION}.tar.gz
     CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} -DJSON_BuildTests=OFF
         INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${STAGE_DIR}
     )

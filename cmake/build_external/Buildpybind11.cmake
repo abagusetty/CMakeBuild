@@ -1,9 +1,6 @@
-bundle_cmake_args(PYBIND11_PYTHON PYTHON_INCLUDE_DIRS PYTHON_LIBRARIES)
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
 
-set(PYBIND_GIT_TAG 8dcced29ae4c7654c25bc50742a72556ee3ae36c)
-if(ENABLE_DEV_MODE)
-  set(PYBIND_GIT_TAG master)
-endif()
+bundle_cmake_args(PYBIND11_PYTHON PYTHON_INCLUDE_DIRS PYTHON_LIBRARIES)
 
 ExternalProject_Add(pybind11_External
     GIT_REPOSITORY https://github.com/pybind/pybind11

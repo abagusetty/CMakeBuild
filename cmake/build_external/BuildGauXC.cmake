@@ -1,3 +1,4 @@
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
 
 if(BLAS_INT4)
     set(LINALG_REQUIRED_COMPONENTS "lp64")
@@ -58,11 +59,6 @@ if(${LINALG_VENDOR} STREQUAL "BLIS" OR ${LINALG_VENDOR} STREQUAL "OpenBLAS" OR $
     if(${LINALG_VENDOR} STREQUAL "BLIS" OR ${LINALG_VENDOR} STREQUAL "OpenBLAS")
         set(_BLAS_PREFIX   "-DBLAS_PREFIX=${CMAKE_INSTALL_PREFIX}")
     endif()
-endif()
-
-set(GXC_GIT_TAG master)
-if(ENABLE_DEV_MODE)
-    set(GXC_GIT_TAG master)
 endif()
 
 is_valid_and_true(GAUXC_TAG __lt_set)

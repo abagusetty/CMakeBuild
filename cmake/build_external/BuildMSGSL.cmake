@@ -1,8 +1,4 @@
-
-set(MSGSL_GIT_TAG 3ba80d5dd465828909e1ee756b8c437d5e820ccc)
-if(ENABLE_DEV_MODE)
-  set(MSGSL_GIT_TAG main)
-endif()
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
 
 if(ENABLE_OFFLINE_BUILD)
 ExternalProject_Add(MSGSL_External

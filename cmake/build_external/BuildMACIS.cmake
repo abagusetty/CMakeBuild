@@ -1,3 +1,4 @@
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
 
 if(BLAS_INT4)
     set(LINALG_REQUIRED_COMPONENTS "lp64")
@@ -58,11 +59,6 @@ if(${LINALG_VENDOR} STREQUAL "BLIS" OR ${LINALG_VENDOR} STREQUAL "IBMESSL")
     if(${LINALG_VENDOR} STREQUAL "BLIS")
         set(_BLAS_PREFIX   "-DBLAS_PREFIX=${CMAKE_INSTALL_PREFIX}")
     endif()
-endif()
-
-set(MACIS_GIT_TAG master)
-if(ENABLE_DEV_MODE)
-    set(MACIS_GIT_TAG master)
 endif()
 
 message(STATUS "MACIS OPTIONS: ${_BLAS_PREFIX} ${_LAPACK_PREFIX} \

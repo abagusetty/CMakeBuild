@@ -1,8 +1,4 @@
-
-set(ECPINT_GIT_TAG 8e788d4ea9b74e464dd834441369e3e8488256d9)
-if(ENABLE_DEV_MODE)
-  set(ECPINT_GIT_TAG master)
-endif()
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
 
 if(ENABLE_OFFLINE_BUILD)
 ExternalProject_Add(EcpInt_External

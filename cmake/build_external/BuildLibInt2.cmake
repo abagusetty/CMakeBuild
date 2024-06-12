@@ -1,7 +1,8 @@
-#
-# This file will build LibInt using a mock super-build incase Eigen3 needs to be
-# built as well
-#
+
+# This file will build LibInt
+
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
+
 find_or_build_dependency(Eigen3)
 package_dependency(Eigen3 DEPENDENCY_PATHS)
 set(TEST_LIBINT FALSE)
@@ -9,10 +10,9 @@ if(${PROJECT_NAME} STREQUAL "TestBuildLibInt")
     set(TEST_LIBINT TRUE)
 endif()
 
-set(LIBINT_VERSION 2.9.0)
 set(LIBINT_URL https://github.com/evaleev/libint)
-set(LIBINT_TAR ${LIBINT_URL}/releases/download/v${LIBINT_VERSION})
-set(LIBINT_TAR ${LIBINT_TAR}/libint-${LIBINT_VERSION})
+set(LIBINT_TAR ${LIBINT_URL}/releases/download/v${CMSB_LIBINT_VERSION})
+set(LIBINT_TAR ${LIBINT_TAR}/libint-${CMSB_LIBINT_VERSION})
 if(TEST_LIBINT)
     #Grab the small version of libint for testing purposes
     set(LIBINT_TAR ${LIBINT_TAR}-test-mpqc4.tgz)
@@ -29,10 +29,10 @@ if(LIBINT_ERI)
 endif()
 
 if(ENABLE_OFFLINE_BUILD)
-  set(LIBINT_TAR ${DEPS_LOCAL_PATH}/libint-${LIBINT_VERSION}.tgz)
+  set(LIBINT_TAR ${DEPS_LOCAL_PATH}/libint-${CMSB_LIBINT_VERSION}.tgz)
 endif()
 
-set (LI_SRC_SDIR libint-${LIBINT_VERSION})
+set (LI_SRC_SDIR libint-${CMSB_LIBINT_VERSION})
 if("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Darwin")
   set(LI_SRC_SDIR ".")
 endif()

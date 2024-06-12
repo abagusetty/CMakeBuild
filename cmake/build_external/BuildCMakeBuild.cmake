@@ -1,6 +1,4 @@
-#
-# In a pretty meta turn of events, this file will build this project...
-#
+# In a pretty meta turn of events, this file will build this project.
 
 ExternalProject_Add(CMakeBuild_External
     SOURCE_DIR ${CMSB_ROOT}/CMakeBuild

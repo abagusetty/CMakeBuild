@@ -1,4 +1,4 @@
-set(NUMACTL_GIT_TAG master)
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
 
 ExternalProject_Add(numactl_External
     GIT_REPOSITORY https://github.com/numactl/numactl.git

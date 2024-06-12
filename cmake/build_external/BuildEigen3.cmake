@@ -1,7 +1,4 @@
-set(EIGEN_GIT_TAG e887196d9d67e48c69168257d599371abf1c3b31) #Mar 17, 2023
-if(ENABLE_DEV_MODE)
-    set(EIGEN_GIT_TAG master)
-endif()
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
 
 is_valid_and_true(EIGEN_TAG __et_set)
 if(__et_set)

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION ${CMAKE_VERSION})
-project(ELPA VERSION 2024.03.001 LANGUAGES C CXX Fortran)
+project(ELPA VERSION ${CMSB_ELPA_VERSION} LANGUAGES C CXX Fortran)
 
 include(DependencyMacros)
 include(ExternalProject)
@@ -135,7 +135,7 @@ message(STATUS "ELPA configure options:
 if(ENABLE_OFFLINE_BUILD)
 else()
 ExternalProject_Add(ELPA_External
-    URL https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/2024.03.001/elpa-2024.03.001.tar.gz
+    URL https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${CMSB_ELPA_VERSION}/elpa-${CMSB_ELPA_VERSION}.tar.gz
     CONFIGURE_COMMAND ./configure --prefix=${CMAKE_INSTALL_PREFIX}
                                     ${ELPA_INTRINSICS}
                                     ${ELPA_SHARED_LIBS}

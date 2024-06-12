@@ -1,9 +1,4 @@
-
-
-set(TAMM_GIT_TAG main)
-if(ENABLE_DEV_MODE OR USE_TAMM_DEV)
-    set(TAMM_GIT_TAG develop)
-endif()
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
 
 ExternalProject_Add(TAMM_External
     GIT_REPOSITORY https://github.com/NWChemEx-Project/TAMM

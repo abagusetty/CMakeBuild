@@ -6,6 +6,8 @@ include(DependencyMacros)
 
 enable_language(Fortran)
 
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
+
     is_valid_and_true(GA_RUNTIME __set)
     if (NOT __set)
         message(STATUS "ARMCI network not set, defaulting to MPI_PROGRESS_RANK")
@@ -15,9 +17,7 @@ enable_language(Fortran)
     set(GA_REPO "https://github.com/GlobalArrays/ga.git")
     is_valid_and_true(GA_TAG __set)
     if(__set)
-        set(GA_GIT_TAG ${GA_TAG})
-    else()
-        set(GA_GIT_TAG develop)
+      set(GA_GIT_TAG ${GA_TAG})
     endif()
 
     if(GCCROOT)

@@ -1,8 +1,4 @@
-
-set(LIBRETT_GIT_TAG master)
-if(ENABLE_DEV_MODE)
-  set(LIBRETT_GIT_TAG master)
-endif()
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
 
 is_valid_and_true(LIBRETT_TAG __lt_set)
 if(__lt_set)

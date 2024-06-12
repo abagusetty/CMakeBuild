@@ -1,7 +1,8 @@
-#
-# This file will build Netlib's ScaLAPACK distribution over 
+# This file will build the Reference ScaLAPACK distribution over 
 # an existing BLAS and LAPACK installation.
-#
+
+include(${CMAKE_CURRENT_LIST_DIR}/dep_versions.cmake)
+
 enable_language(C Fortran)
 foreach(depend BLAS LAPACK)
     find_or_build_dependency(${depend})
@@ -10,11 +11,6 @@ endforeach()
 
 
 set(ScaLAPACK_URL https://github.com/Reference-ScaLAPACK/scalapack.git)
-set(SL_GIT_TAG 2072b8602f0a5a84d77a712121f7715c58a2e80d)
-if(ENABLE_DEV_MODE)
-  set(SL_GIT_TAG master)
-endif()
-
 
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "Cray")
     message(STATUS "Detected Cray Fortran compiler!")
