@@ -189,35 +189,7 @@ function(cmsb_find_dependency __name)
                         endif()
                     endif()
                   elseif(${__name} STREQUAL "numactl")
-                    find_library( _numactl_LIBRARIES
-                        NAMES numa
-                        HINTS ${DEP_PATHS}
-                        PATHS ${DEP_PATHS}
-                        PATH_SUFFIXES lib lib64
-                        NO_DEFAULT_PATH
-                    )
-
-                    find_path( _numactl_INCLUDE_DIR
-                        NAMES numa.h
-                        HINTS ${DEP_PATHS}
-                        PATHS ${DEP_PATHS}
-                        PATH_SUFFIXES include
-                        NO_DEFAULT_PATH
-                    )
-                    find_package_handle_standard_args( numactl
-                        REQUIRED_VARS _numactl_LIBRARIES _numactl_INCLUDE_DIR
-                        HANDLE_COMPONENTS
-                    )
-                    if(numactl_FOUND)
-                        set(numactl_INCLUDE_DIR ${_numactl_INCLUDE_DIR})
-                        if( _numactl_LIBRARIES AND NOT TARGET numactl-cmsb )
-                            add_library( numactl-cmsb INTERFACE IMPORTED )
-                            set_target_properties( numactl-cmsb PROPERTIES
-                                INTERFACE_INCLUDE_DIRECTORIES "${_numactl_INCLUDE_DIR}"
-                                INTERFACE_LINK_LIBRARIES      "${_numactl_LIBRARIES}"
-                            )
-                        endif()
-                    endif()
+                    find_package(numactl)
                   endif()
                 endif()
             else()
@@ -269,7 +241,7 @@ function(cmsb_find_dependency __name)
                 elseif(${__NAME} STREQUAL "NUMACTL")
                     set(${name_var}_LIBRARIES numactl-cmsb)
                     target_include_directories(${_tname} SYSTEM INTERFACE
-                        ${${name_var}_INCLUDE_DIR})
+                        ${${__NAME}_INCLUDE_DIRS})
 
                 elseif(${__NAME} STREQUAL "ELPA")
                     set(${name_var}_LIBRARIES elpa_cmsb)
