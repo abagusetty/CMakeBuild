@@ -1,16 +1,16 @@
 # Pin dependency versions
 
-set(CMSB_HDF5_VERSION hdf5-1_14_2)
+set(CMSB_HDF5_VERSION hdf5_1.14.4.3)
 set(CMSB_DOCTEST_VERSION 2.4.9)
 set(CMSB_ELPA_VERSION 2024.03.001)
 
-set(TAMM_GIT_TAG 2024-06-11)
+set(TAMM_GIT_TAG main) #2024-06-12
 if(ENABLE_DEV_MODE OR USE_TAMM_DEV)
     set(TAMM_GIT_TAG develop)
 endif()
 
 # numactl
-set(NUMACTL_GIT_TAG 8c454ecb0e274d254a9393346297936e67ef9e05)
+set(NUMACTL_GIT_TAG master)
 
 # Eigen3
 set(EIGEN_GIT_TAG e887196d9d67e48c69168257d599371abf1c3b31) #Mar 17, 2023
@@ -19,13 +19,13 @@ if(ENABLE_DEV_MODE)
 endif()
 
 # spdlog
-set(SPDLOG_GIT_TAG cedfeeb95f3af11df7d3b1e7e0d3b86b334dc23b)
+set(SPDLOG_GIT_TAG v1.14.1)
 if(ENABLE_DEV_MODE)
   set(SPDLOG_GIT_TAG v1.x)
 endif()
 
 # BLIS
-set(BLIS_GIT_TAG 7a87e57b69d697a9b06231a5c0423c00fa375dc1)
+set(BLIS_GIT_TAG 1.0)
 
 if(USE_SCALAPACK)
   #The next commit breaks scalapack builds
@@ -36,13 +36,13 @@ endif()
 set(OpenBLAS_GIT_TAG 0.3.27)
 
 # LAPACK
-set(LAPACK_GIT_TAG eb8f5fa6462a483431c258f4d6831aa3d4192771)
+set(LAPACK_GIT_TAG 8b468db25c0c5a25d8e0020c7e2134e14cfd33d0)
 if(ENABLE_DEV_MODE)
   set(LAPACK_GIT_TAG master)
 endif()
 
 # ScaLAPACK
-set(SL_GIT_TAG 2072b8602f0a5a84d77a712121f7715c58a2e80d)
+set(SL_GIT_TAG 0234af94c6578c53ac4c19f2925eb6e5c4ad6f0f)
 if(ENABLE_DEV_MODE)
   set(SL_GIT_TAG master)
 endif()
@@ -58,19 +58,19 @@ if(ENABLE_DEV_MODE)
 endif()
 
 # Global Arrays
-set(GA_GIT_TAG 32fdc5d9cf6351daed95d64c9757f116db6ee62f)
+set(GA_GIT_TAG develop)
 if(ENABLE_DEV_MODE)
     set(GA_GIT_TAG develop)
 endif()
 
 # HPTT
-set(HPTT_GIT_TAG eff1bdd79734ddc4993dd4df1d0cdbd40758b9cb)
+set(HPTT_GIT_TAG master)
 if(ENABLE_DEV_MODE)
     set(HPTT_GIT_TAG master)
 endif()
 
 # Librett
-set(LIBRETT_GIT_TAG fc6be48658cee9f3f62bbd7f8dca09156285033b)
+set(LIBRETT_GIT_TAG master)
 if(ENABLE_DEV_MODE)
   set(LIBRETT_GIT_TAG master)
 endif()
@@ -79,19 +79,19 @@ endif()
 set(CMSB_LIBINT_VERSION 2.9.0)
 
 # LibEcpInt
-set(ECPINT_GIT_TAG 8e788d4ea9b74e464dd834441369e3e8488256d9)
+set(ECPINT_GIT_TAG master)
 if(ENABLE_DEV_MODE)
   set(ECPINT_GIT_TAG master)
 endif()
 
 # GauXC
-set(GXC_GIT_TAG be9ac8d014b139ccaccc63bb259a062a9b2b2b6b)
+set(GXC_GIT_TAG master)
 if(ENABLE_DEV_MODE)
     set(GXC_GIT_TAG master)
 endif()
 
 # Unused
-set(PYBIND_GIT_TAG 35ff42b56e9d34d9a944266eb25f2c899dbdfed7)
+set(PYBIND_GIT_TAG master)
 if(ENABLE_DEV_MODE)
   set(PYBIND_GIT_TAG master)
 endif()
