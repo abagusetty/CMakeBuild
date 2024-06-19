@@ -25,12 +25,8 @@ if(ENABLE_DEV_MODE)
 endif()
 
 # BLIS
-set(BLIS_GIT_TAG 1.0)
+set(BLIS_GIT_TAG 415893066e966159799d96166cadcf9bb5535b1c)
 
-if(USE_SCALAPACK)
-  #The next commit breaks scalapack builds
-  set(BLIS_GIT_TAG 6f412204004666abac266409a203cb635efbabf3)
-endif()
 
 # OpenBLAS
 set(OpenBLAS_GIT_TAG 0.3.27)
@@ -58,7 +54,7 @@ if(ENABLE_DEV_MODE)
 endif()
 
 # Global Arrays
-set(GA_GIT_TAG 6636f3ec85b9bf752f5fd9813faa11b0ddd75b7a)
+set(GA_GIT_TAG develop)
 if(ENABLE_DEV_MODE)
     set(GA_GIT_TAG develop)
 endif()
@@ -70,7 +66,7 @@ if(ENABLE_DEV_MODE)
 endif()
 
 # Librett
-set(LIBRETT_GIT_TAG 818f4f5e5a58e837cc6e71300703b65266a1039b)
+set(LIBRETT_GIT_TAG master)
 if(ENABLE_DEV_MODE)
   set(LIBRETT_GIT_TAG master)
 endif()
@@ -79,13 +75,13 @@ endif()
 set(CMSB_LIBINT_VERSION 2.9.0)
 
 # LibEcpInt
-set(ECPINT_GIT_TAG ee6d75a969bb92535a9ecf2ba4b564a75b7ef84b)
+set(ECPINT_GIT_TAG master)
 if(ENABLE_DEV_MODE)
   set(ECPINT_GIT_TAG master)
 endif()
 
 # GauXC
-set(GXC_GIT_TAG 2c94d73e779a817dfc48a9d8629df7fdfba636d7)
+set(GXC_GIT_TAG master)
 if(ENABLE_DEV_MODE)
     set(GXC_GIT_TAG master)
 endif()

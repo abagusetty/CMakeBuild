@@ -45,7 +45,7 @@ if(BLAS_INT4)
     set(BLIS_INT_FLAGS -i 32 -b 32 --enable-cblas)
 endif()
 
-set(BLIS_MISC_OPTIONS --without-memkind)
+set(BLIS_MISC_OPTIONS --without-memkind --enable-scalapack-compat)
 
 if(ENABLE_OFFLINE_BUILD)
 ExternalProject_Add(BLAS_External
