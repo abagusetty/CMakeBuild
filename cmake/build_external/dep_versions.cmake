@@ -20,9 +20,6 @@ endif()
 
 # spdlog
 set(SPDLOG_GIT_TAG v1.14.1)
-if(ENABLE_DEV_MODE)
-  set(SPDLOG_GIT_TAG v1.x)
-endif()
 
 # BLIS
 set(BLIS_GIT_TAG 415893066e966159799d96166cadcf9bb5535b1c)

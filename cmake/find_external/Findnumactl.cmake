@@ -9,10 +9,7 @@
 
 set(NUMACTL_HINTS ${STAGE_DIR}${CMAKE_INSTALL_PREFIX} ${CMAKE_INSTALL_PREFIX})
 
-set( numactl_LIBRARY_NAME libnuma.a numa )
-if(BUILD_SHARED_LIBS)
-  set( numactl_LIBRARY_NAME numa )
-endif()
+set( numactl_LIBRARY_NAME numa )
 
 find_path(numactl_INCLUDE_DIR numa.h
             HINTS ${NUMACTL_HINTS}

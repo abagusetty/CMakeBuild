@@ -9,9 +9,7 @@ ExternalProject_Add(SPDLOG_External
 )
 else()
 ExternalProject_Add(SPDLOG_External
-    GIT_REPOSITORY https://github.com/gabime/spdlog
-    GIT_TAG ${SPDLOG_GIT_TAG}
-    UPDATE_DISCONNECTED 1
+    URL https://github.com/gabime/spdlog/archive/refs/tags/${SPDLOG_GIT_TAG}.tar.gz
     CMAKE_ARGS ${DEPENDENCY_CMAKE_OPTIONS} -DSPDLOG_INSTALL=ON
     INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${STAGE_DIR}
     CMAKE_CACHE_ARGS ${CORE_CMAKE_LISTS}
